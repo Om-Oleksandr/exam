@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+
+./client/node_modules
+/client/public/staticImages
+/server/node_modules
+/server/uploadFiles
+/server/upload
+/server/public
+
