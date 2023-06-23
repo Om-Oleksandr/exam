@@ -7,23 +7,30 @@ import {
   clearAddOfferError,
 } from '../../store/slices/contestByIdSlice';
 import styles from './OfferForm.module.sass';
-import ImageUpload from '../InputComponents/ImageUpload/ImageUpload';
 import FormInput from '../FormInput/FormInput';
 import Schems from '../../utils/validators/validationSchems';
 import Error from '../Error/Error';
 
 const OfferForm = props => {
-  const renderOfferInput = () => {
+  const renderOfferInput = formikProps => {
     if (props.contestType === CONTANTS.LOGO_CONTEST) {
       return (
-        <ImageUpload
-          name='offerData'
-          classes={{
-            uploadContainer: styles.imageUploadContainer,
-            inputContainer: styles.uploadInputContainer,
-            imgStyle: styles.imgStyle,
-          }}
-        />
+        <>
+          <label htmlFor='file'>
+            Choose file
+            <input
+              type='file'
+              name='offerData'
+              id='file'
+              onChange={event => {
+                return formikProps.setFieldValue(
+                  'offerData',
+                  event.target.files[0]
+                );
+              }}
+            />
+          </label>
+        </>
       );
     }
     return (
@@ -74,14 +81,14 @@ const OfferForm = props => {
         }}
         validationSchema={validationSchema}
       >
-        <Form className={styles.form}>
-          {renderOfferInput()}
-          {valid && (
+        {formikProps => (
+          <Form className={styles.form} encType='multipart/form-data'>
+            {renderOfferInput(formikProps)}
             <button type='submit' className={styles.btnOffer}>
               Send Offer
             </button>
-          )}
-        </Form>
+          </Form>
+        )}
       </Formik>
     </div>
   );
