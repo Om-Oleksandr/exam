@@ -1,4 +1,4 @@
-
+const { OFFER_STATUSES } = require('../constants');
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Offers', {
@@ -26,20 +26,24 @@ module.exports = {
       },
       text: {
         type: Sequelize.STRING,
-        allowNull: true,
       },
       fileName: {
         type: Sequelize.STRING,
-        allowNull: true,
       },
       originalFileName: {
         type: Sequelize.STRING,
-        allowNull: true,
       },
       status: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        defaultValue: 'pending',
+        type: Sequelize.ENUM(...Object.values(OFFER_STATUSES)),
+        defaultValue: OFFER_STATUSES.PENDING,
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },

@@ -2,21 +2,30 @@ const env = process.env.NODE_ENV || 'development';
 const serverIP = 'localhost';
 const serverPort = 3000;
 export default {
-  CUSTOMER: 'customer',
-  CREATOR: 'creator',
-  CONTEST_STATUS_ACTIVE: 'active',
-  CONTEST_STATUS_FINISHED: 'finished',
-  CONTEST_STATUS_PENDING: 'pending',
-  NAME_CONTEST: 'name',
-  LOGO_CONTEST: 'logo',
-  TAGLINE_CONTEST: 'tagline',
-  OFFER_STATUS_REJECTED: 'rejected',
-  OFFER_STATUS_WON: 'won',
-  OFFER_STATUS_PENDING: 'pending',
+  ROLES: {
+    CUSTOMER: 'customer',
+    CREATOR: 'creator',
+  },
+  CONTEST_STATUSES: {
+    ACTIVE: 'active',
+    FINISHED: 'finished',
+    PENDING: 'pending',
+  },
+  CONTEST_TYPES: {
+    NAME: 'name',
+    LOGO: 'logo',
+    TAGLINE: 'tagline',
+  },
+  OFFER_STATUSES: {
+    REJECTED: 'rejected',
+    WON: 'won',
+    PENDING: 'pending',
+  },
   STATIC_IMAGES_PATH: '/staticImages/',
   ANONYM_IMAGE_PATH: '/staticImages/anonym.png',
   BASE_URL: `http://${serverIP}:${serverPort}/`,
   ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
   publicURL:
     env === 'production'
       ? `http://${serverIP}:80/images/`
