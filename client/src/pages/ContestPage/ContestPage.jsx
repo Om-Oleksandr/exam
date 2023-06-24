@@ -67,8 +67,8 @@ class ContestPage extends React.Component {
     const contestStatus = this.props.contestByIdStore.contestData.status;
     return (
       contestCreatorId === userId &&
-      contestStatus === CONSTANTS.CONTEST_STATUS_ACTIVE &&
-      offerStatus === CONSTANTS.OFFER_STATUS_PENDING
+      contestStatus === CONSTANTS.CONTEST_STATUSES.ACTIVE &&
+      offerStatus === CONSTANTS.OFFER_STATUSES.PENDING
     );
   };
 
@@ -182,8 +182,8 @@ class ContestPage extends React.Component {
                 />
               ) : (
                 <div className={styles.offersContainer}>
-                  {role === CONSTANTS.CREATOR &&
-                    contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE && (
+                  {role === CONSTANTS.ROLES.CREATOR &&
+                    contestData.status === CONSTANTS.CONTEST_STATUSES.ACTIVE && (
                       <OfferForm
                         contestType={contestData.contestType}
                         contestId={contestData.id}

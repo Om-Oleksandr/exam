@@ -45,7 +45,7 @@ const UserProfile = (props) => {
             >
               UserInfo
             </div>
-            {role === CONSTANTS.CREATOR && (
+            {role === CONSTANTS.ROLES.CREATOR && (
               <div
                 className={classNames(styles.optionContainer, {
                   [styles.currentOption]:

@@ -8,22 +8,21 @@ import styles from './ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
 import FormInput from '../FormInput/FormInput';
 import SelectInput from '../SelectInput/SelectInput';
-import FieldFileInput from '../InputComponents/FieldFileInput/FieldFileInput';
 import FormTextArea from '../InputComponents/FormTextArea/FormTextArea';
 import TryAgain from '../TryAgain/TryAgain';
 import Schems from '../../utils/validators/validationSchems';
 import OptionalSelects from '../OptionalSelects/OptionalSelects';
 
 const variableOptions = {
-  [CONSTANTS.NAME_CONTEST]: {
+  [CONSTANTS.CONTEST_TYPES.NAME]: {
     styleName: '',
     typeOfName: '',
   },
-  [CONSTANTS.LOGO_CONTEST]: {
+  [CONSTANTS.CONTEST_TYPES.LOGO]: {
     nameVenture: '',
     brandStyle: '',
   },
-  [CONSTANTS.TAGLINE_CONTEST]: {
+  [CONSTANTS.CONTEST_TYPES.TAGLINE]: {
     nameVenture: '',
     typeOfTagline: '',
   },
@@ -33,18 +32,18 @@ class ContestForm extends React.Component {
   getPreference = () => {
     const { contestType } = this.props;
     switch (contestType) {
-      case CONSTANTS.NAME_CONTEST: {
+      case CONSTANTS.CONTEST_TYPES.NAME: {
         this.props.getData({
           characteristic1: 'nameStyle',
           characteristic2: 'typeOfName',
         });
         break;
       }
-      case CONSTANTS.TAGLINE_CONTEST: {
+      case CONSTANTS.CONTEST_TYPES.TAGLINE: {
         this.props.getData({ characteristic1: 'typeOfTagline' });
         break;
       }
-      case CONSTANTS.LOGO_CONTEST: {
+      case CONSTANTS.CONTEST_TYPES.LOGO: {
         this.props.getData({ characteristic1: 'brandStyle' });
         break;
       }

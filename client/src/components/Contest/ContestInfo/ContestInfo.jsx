@@ -30,7 +30,7 @@ const ContestInfo = props => {
             <span className={styles.label}>Contest Type</span>
             <span className={styles.data}>{contestType}</span>
           </div>
-          {User.id === userId && status !== CONSTANTS.CONTEST_STATUS_FINISHED && (
+          {User.id === userId && status !== CONSTANTS.CONTEST_STATUSES.FINISHED && (
             <div
               onClick={() => changeEditContest(true)}
               className={styles.editBtn}
@@ -38,7 +38,7 @@ const ContestInfo = props => {
               Edit
             </div>
           )}
-          {role !== CONSTANTS.CUSTOMER && (
+          {role !== CONSTANTS.ROLES.CUSTOMER && (
             <i onClick={goChat} className='fas fa-comments' />
           )}
         </div>
@@ -46,12 +46,12 @@ const ContestInfo = props => {
           <span className={styles.label}>Title of the Project</span>
           <span className={styles.data}>{title}</span>
         </div>
-        {contestType === CONSTANTS.NAME_CONTEST ? (
+        {contestType === CONSTANTS.CONTEST_TYPES.NAME ? (
           <NameContestSpecialInfo
             typeOfName={typeOfName}
             styleName={styleName}
           />
-        ) : contestType === CONSTANTS.TAGLINE_CONTEST ? (
+        ) : contestType === CONSTANTS.CONTEST_TYPES.TAGLINE ? (
           <TaglineContestSpecialInfo
             typeOfTagline={typeOfTagline}
             nameVenture={contestData.nameVenture}

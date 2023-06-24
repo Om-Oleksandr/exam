@@ -27,7 +27,7 @@ const UserInfo = (props) => {
         <div className={styles.infoContainer}>
           <img
             src={
-              avatar === 'anon.png'
+              avatar === null
                 ? CONSTANTS.ANONYM_IMAGE_PATH
                 : `${CONSTANTS.publicURL}${avatar}`
             }
@@ -55,7 +55,7 @@ const UserInfo = (props) => {
               <span className={styles.label}>Role</span>
               <span className={styles.info}>{role}</span>
             </div>
-            {role === CONSTANTS.CREATOR && (
+            {role === CONSTANTS.ROLES.CREATOR && (
               <div className={styles.infoBlock}>
                 <span className={styles.label}>Balance</span>
                 <span className={styles.info}>{`${balance}$`}</span>

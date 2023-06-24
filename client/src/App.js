@@ -56,7 +56,7 @@ class App extends Component {
             exact
             path='/startContest/nameContest'
             component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.NAME_CONTEST,
+              contestType: CONSTANTS.CONTEST_TYPES.NAME,
               title: 'Company Name',
             })}
           />
@@ -64,7 +64,7 @@ class App extends Component {
             exact
             path='/startContest/taglineContest'
             component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.TAGLINE_CONTEST,
+              contestType: CONSTANTS.CONTEST_TYPES.TAGLINE,
               title: 'TAGLINE',
             })}
           />
@@ -72,7 +72,7 @@ class App extends Component {
             exact
             path='/startContest/logoContest'
             component={PrivateHoc(ContestCreationPage, {
-              contestType: CONSTANTS.LOGO_CONTEST,
+              contestType: CONSTANTS.CONTEST_TYPES.LOGO,
               title: 'LOGO',
             })}
           />

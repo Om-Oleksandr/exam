@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual';
 import WebSocket from './WebSocket';
-import CONTANTS from '../../../constants';
+import CONSTANTS from '../../../constants';
 import {
   addMessage,
   changeBlockStatusInStore,
@@ -18,7 +18,7 @@ class ChatSocket extends WebSocket {
   };
 
   onChangeBlockStatus = () => {
-    this.socket.on(CONTANTS.CHANGE_BLOCK_STATUS, data => {
+    this.socket.on(CONSTANTS.CHANGE_BLOCK_STATUS, data => {
       this.dispatch(changeBlockStatusInStore(data.message));
     });
   };
