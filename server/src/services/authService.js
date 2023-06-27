@@ -3,9 +3,7 @@ const { MAX_DEVICES_AMOUNT } = require('../constants');
 
 module.exports.createSession = async user => {
   try {
-    console.log(user);
     const tokenPair = await JWTService.createTokenPair(user);
-    console.log('TOKEN======>>>>>>', tokenPair);
     if ((await user.countRefreshTokens()) >= MAX_DEVICES_AMOUNT) {
       const [oldestToken] = await user.getRefreshTokens({
         order: [['updatedAt', 'ASC']],
@@ -17,7 +15,6 @@ module.exports.createSession = async user => {
     user.password = undefined;
     return { user, tokenPair };
   } catch (error) {
-    console.log(user);
     throw new Error(error.message);
   }
 };

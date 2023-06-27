@@ -120,6 +120,7 @@ module.exports.updateContest = async (req, res, next) => {
   }
 };
 
+
 module.exports.setNewOffer = async (req, res, next) => {
   const obj = {};
   if (req.body.contestType === CONSTANTS.CONTEST_TYPES.LOGO) {
@@ -131,14 +132,21 @@ module.exports.setNewOffer = async (req, res, next) => {
   obj.userId = req.tokenData.userId;
   obj.contestId = req.body.contestId;
   try {
-    const result = await contestQueries.createOffer(obj);
-    delete result.contestId;
-    delete result.userId;
+    const result = await db.Offer.create(obj, {
+      include: [
+        {
+          model: db.User,
+          through: { attributes: ['avatar', 'firstName', 'lastName', 'email', 'rating'] },
+          required: true,
+        },
+      ],
+    });
+    const user = await result.getUser();
     controller
       .getNotificationController()
       .emitEntryCreated(req.body.customerId);
-    const User = Object.assign({}, req.tokenData, { id: req.tokenData.userId });
-    return res.send(Object.assign({}, result, { User }));
+    const data = {...result.dataValues, User: {...user.dataValues}};
+    return res.send(data);
   } catch (e) {
     return next(new ServerError());
   }
