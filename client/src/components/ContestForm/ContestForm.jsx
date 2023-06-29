@@ -47,6 +47,8 @@ class ContestForm extends React.Component {
         this.props.getData({ characteristic1: 'brandStyle' });
         break;
       }
+      default:
+        break;
     }
   };
 
@@ -139,7 +141,13 @@ class ContestForm extends React.Component {
                   />
                 </div>
                 <OptionalSelects {...this.props} />
-                <input name='file' type='file' onChange={event => formikProps.setFieldValue('file', event.target.files[0])} />
+                <input
+                  name='file'
+                  type='file'
+                  onChange={event =>
+                    formikProps.setFieldValue('file', event.target.files[0])
+                  }
+                />
                 {this.props.isEditContest ? (
                   <button type='submit' className={styles.changeData}>
                     Set Data

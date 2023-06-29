@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 import Header from '../../components/Header/Header';
 import CONSTANTS from '../../constants';
 import SlideBar from '../../components/SlideBar/SlideBar';
@@ -12,9 +13,9 @@ import Spinner from '../../components/Spinner/Spinner';
 const Home = props => {
   const [index, setIndex] = useState(0);
   const [styleName, setStyle] = useState(styles.headline__static);
-  let timeout;
 
   useEffect(() => {
+    let timeout;
     timeout = setInterval(() => {
       setIndex(index + 1);
       setStyle(styles.headline__isloading);
@@ -107,7 +108,7 @@ const Home = props => {
                 </div>
               </div>
             </div>
-            <div className={styles.greyContainer}>
+            <div className={styles.sponsorsContainer}>
               <div className={styles.adv}>
                 <div className={styles.images}>
                   <img
@@ -157,7 +158,7 @@ const Home = props => {
             </div>
             <h2>How Do Name Contest Work?</h2>
             <div className={styles.whiteContainer}>
-              <div className={styles.stepReverse}>
+              <div className={cx(styles.step, styles.reverse)}>
                 <div>
                   <h3>Step 1: Launch a Naming Contest</h3>
                   <p>
@@ -182,11 +183,8 @@ const Home = props => {
               </div>
             </div>
             <div className={styles.greenContainer}>
-              <div className={styles.step}>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}gif/2-compressed-new.gif`}
-                  alt='compressed'
-                />
+              <div className={cx(styles.step)}>
+                
                 <div className={styles.greenStep}>
                   <h3>Step 2: Ideas start pouring in within minutes</h3>
                   <p>
@@ -202,10 +200,14 @@ const Home = props => {
                     </span>
                   </p>
                 </div>
+                <img
+                  src={`${CONSTANTS.STATIC_IMAGES_PATH}gif/2-compressed-new.gif`}
+                  alt='compressed'
+                />
               </div>
             </div>
             <div className={styles.greyContainer}>
-              <div className={styles.stepReverse}>
+              <div className={cx(styles.step, styles.reverse)}>
                 <div>
                   <h3>Step 3: Rate Entries & Brainstorm with Creatives</h3>
                   <p>

@@ -3,12 +3,14 @@
   display: flex
   flex-direction: column
   align-items: center
+  padding: 0 5px
 
   .footer
     padding-top: 80px
     background: white
     display: flex
     justify-content: center
+    
 
     .articlesMainContainer
       width: 60%
@@ -19,15 +21,15 @@
       align-items: flex-start
       @media(max-width: 1000px)
         flex-direction: column
+      @media (max-width: 550px)
+        width: 100%
+        padding: 0 5px
 
       .ColumnContainer
         display: flex
         flex-direction: column
         justify-content: flex-start
         align-items: flex-start
-        margin-right: 48px
-        margin-left: 48px
-        flex: 1
 
         .headerArticle
           font-size: 16px
@@ -47,21 +49,19 @@
             color: #f18762
 
   .signUpContainer
-    width: 72%
-    padding: 20px
+    width: 100%
+    padding: 40px 5px 20px
     min-width: 280px
     min-height: 650px
-    padding-top: 40px
 
 
     .headerSignUpPage
+      max-width: 1140px
       display: flex
       flex-direction: row
       justify-content: space-between
       align-items: center
-      margin-top: 26px
-      padding-left: 45px
-      padding-right: 60px
+      margin: 25px auto 0
       @media (max-width: 530px)
         padding: 0
 

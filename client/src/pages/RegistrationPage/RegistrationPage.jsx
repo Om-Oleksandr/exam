@@ -63,8 +63,6 @@ const RegistrationPage = props => {
               favorite names, and receive Trademark Risk and Linguistics
               Analysis Reports developed by a Licensed Trademark Attorney.
             </div>
-          </div>
-          <div className={styles.ColumnContainer}>
             <div className={styles.headerArticle}>
               I’ve never used Squadhelp before. What should I expect?
             </div>
