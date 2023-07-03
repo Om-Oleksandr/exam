@@ -258,6 +258,9 @@ class Header extends React.Component {
                     </li>
                   </ul>
                 </li>
+                <li>
+                  <Link to='/help'>Help</Link>
+                </li>
               </ul>
             </div>
             {this.props.data && this.props.data.role !== CONSTANTS.CREATOR && (

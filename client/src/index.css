@@ -3,6 +3,20 @@
    License: none (public domain)
 */
 
+* {
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: Poppins-Regular;
+  src: url(./fonts/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: Poppins-Light;
+  src: url(./fonts/Poppins-Light.ttf);
+}
+
 html,
 body,
 div,
@@ -209,6 +223,10 @@ html {
 /**
  * Address `outline` inconsistency between Chrome and other browsers.
  */
+
+a {
+  text-decoration: none;
+}
 
 a:focus {
   outline: thin dotted;
