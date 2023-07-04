@@ -44,7 +44,7 @@ const HowWorks = props => {
       </div>
 
       <section className={className}>
-        <div>
+        <div className={styles.firstColumn}>
           <span>World's #1 Naming Platform</span>
           <div>
             <h1>How Does Squadhelp Work?</h1>
@@ -62,7 +62,7 @@ const HowWorks = props => {
             play video
           </a>
         </div>
-        <div>
+        <div className={styles.secondColumn}>
           <img src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/hero.svg`} />
         </div>
       </section>

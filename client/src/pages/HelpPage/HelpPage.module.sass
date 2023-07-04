@@ -1,50 +1,29 @@
-button,
-.container
+@use "/src/common/styles/templates" as *
+h2
+    margin-bottom: 0.5rem
+    font:
+        size: 2rem
+        weight: 400
+    @media(max-width:420px)
+        font-size: 1.55rem
+button
     font-family: Poppins-Regular, Helvetica, Arial,sans-serif
-.container
-    width: 100%
-    max-width: 1140px
-    display: flex
-    align-items: center
-    flex-wrap: wrap
+.heroContainer
+    @extend %container
     margin: 3.75rem auto 0
-    padding: 0 0.9375rem
-    @media(min-width: 992px)
-        div:first-child
-            flex: 0 0 58.3%
-        div:last-child
-            flex: 0 0 41.7%
-    div span
-        display: inline-block
-        color: #377dff
-        padding: 0.4375rem 0.9375rem
-        margin: 0 0 8px
-        font-size: 0.6875rem
-        line-height: 1.5
-    div div
-        margin-bottom: 15px
-    div a
-        display: inline-block
-        background-color: #377dff
-        padding: 0.75rem 1rem
-        line-height: 1.5
-        border-radius: 6.1875rem
-        border: none
-        color: #fff
-        text-transform: capitalize
-        transition: all 0.2s ease-in-out
-        @media(hover:hover)
-            transform: translate(0, -5px)
-        & img
-            margin: 0 15px 0 0
-        @media(max-width:535px)
-            width: 100%
-    h1
-        margin: 0 0 8px
-        font:
-            size: 2.5rem
-            weight: 600
-        line-height: 1.5
-    p
-        color: #77838f
-        line-height: 1.7
+    padding: 0 0.9375rem 2rem
+
+.servicesContainer
+    @extend %container
+    justify-content: center
+    padding: 2rem 0.9375rem
+    text-align: center
+    div
+        margin-bottom: 4rem
+        span
+            @extend %notice
+    
+
+.cardsList
+    @media(min-width: 768px)
+        display: flex

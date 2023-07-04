@@ -1,0 +1,24 @@
+@use "/src/common/styles/templates" as *
+.wrap
+    background-color: aqua
+.body
+    padding: 4rem 1rem
+    flex: 0 0 33%
+    border: 1px solid #e7eaf3
+    border-radius: .3125rem
+    @media(max-width: 768px)
+        padding: 2rem 1rem
+    div
+        margin-bottom: 1.5rem
+        h3
+            font:
+                size: 1.5rem
+                weight: 500
+            line-height: 1.5
+            margin: 0 0 0.5rem
+    a
+        @include btn(#377dff, 0.3125rem, true)
+.imgContainer
+    width: 72px
+    height: 72px
+    margin: 0 auto 1rem

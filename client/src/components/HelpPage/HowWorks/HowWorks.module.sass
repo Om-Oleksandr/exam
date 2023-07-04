@@ -1,3 +1,4 @@
+@use "/src/common/styles/templates" as *
 .video
     display: none
     position: fixed
@@ -43,4 +44,27 @@
         svg line
             stroke-width: 3px
             stroke: #000
-        
+
+.firstColumn
+    span
+        @extend %notice
+    div
+        margin-bottom: 1.5rem
+    h1
+        margin: 0 0 8px
+        font:
+            size: 2.5rem
+            weight: 600
+        line-height: 1.5
+    a
+        @include btn(#377dff, 6.1875rem, true)
+        & img
+            margin: 0 15px 0 0
+        @media(max-width:535px)
+            width: 100%
+    @media (min-width: 992px)
+        flex: 0 0 58.3%
+.secondColumn
+    @media (min-width: 992px)
+        flex: 0 0 41.7%
+    

@@ -1,0 +1,38 @@
+%container
+    width: 100%
+    max-width: 1280px
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    margin: auto
+    font-family: Poppins-Regular, Helvetica, Arial,sans-serif
+%notice
+    display: inline-block
+    color: #377dff
+    padding: 0.4375rem 0.9375rem
+    margin: 0 0 8px
+    font-size: 0.6875rem
+    line-height: 1.5
+p
+    color: #77838f
+    line-height: 1.7
+    margin-bottom: 1rem
+@mixin btn($bg: #000, $br: 0, $boxshadow: false, $hover:true, $col: #fff)
+    display: inline-block
+    background-color: $bg
+    padding: 0.75rem 1rem
+    line-height: 1.5
+    border-radius: $br
+    border: none
+    color: $col
+    text-transform: capitalize
+    transition: all 0.2s ease-in-out
+    @if $boxshadow 
+        box-shadow: 0 4px 11px rgba($bg,0.35)
+    @if $hover
+        @media(hover: hover)
+            @supports (-webkit-touch-callout: none) or (-ms-touch-action: none) or (touch-action: none)
+                &:hover
+                    transform: translate(0, -3px)
+    
+        
