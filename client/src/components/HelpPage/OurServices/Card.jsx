@@ -5,7 +5,8 @@ import styles from './Card.module.sass';
 const Card = props => {
   const { cardInfo } = props;
   return (
-      <article className={styles.body}>
+    <article className={styles.wrapper}>
+      <div className={styles.body}>
         <div>
           <div className={styles.imgContainer}>
             <img
@@ -20,7 +21,8 @@ const Card = props => {
           <p>{cardInfo.content}</p>
         </div>
         <a href=''>{cardInfo.btnText}</a>
-      </article>
+      </div>
+    </article>
   );
 };
 export default Card;

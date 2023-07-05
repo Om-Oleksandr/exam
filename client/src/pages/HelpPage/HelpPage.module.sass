@@ -18,12 +18,46 @@ button
     justify-content: center
     padding: 2rem 0.9375rem
     text-align: center
-    div
+    div.servicesHeader
         margin-bottom: 4rem
         span
             @extend %notice
     
 
 .cardsList
+    margin: 0
     @media(min-width: 768px)
         display: flex
+
+.stepsContainer
+    @extend %container
+    justify-content: center
+    padding: 8rem 0.9375rem
+
+    @media(min-width: 992px)
+        align-items: center
+    @media(max-width: 768px)
+        padding: 
+            top: 4rem
+            bottom: 4rem
+.stepsHeader
+    margin-bottom: 4rem
+    div
+        @extend %imgWrapper
+
+.stepsInnerContainer
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+.innerItem
+    flex: 0 0 50%
+    padding: 0 0.9375rem
+    @media(max-width: 992px)
+        flex: 0 0 100%
+    &:first-child
+        @media(max-width: 992px)
+            order: 2
+    &:last-child
+        margin-bottom: 3rem
+        @media(min-width: 993px)
+            margin-bottom: 0
