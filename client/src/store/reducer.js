@@ -10,7 +10,7 @@ import contestByIdReducer from './slices/contestByIdSlice';
 import contestUpdationReducer from './slices/contestUpdationSlice';
 import chatReducer from './slices/chatSlice';
 import userProfileReducer from './slices/userProfileSlice';
-
+import tabsReducer from './slices/tabsMenuSlice';
 const rootReducer = combineReducers({
   userStore: userReducer,
   auth: authReducer,
@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
   contestUpdationStore: contestUpdationReducer,
   chatStore: chatReducer,
   userProfile: userProfileReducer,
+  tabs: tabsReducer,
 });
 
 export default rootReducer;

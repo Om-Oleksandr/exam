@@ -5,6 +5,7 @@ import HowWorks from '../../components/HelpPage/HowWorks';
 import OurServices from '../../components/HelpPage/OurServices';
 import styles from './HelpPage.module.sass';
 import Steps from '../../components/HelpPage/Steps';
+import InfoTabs from '../../components/HelpPage/InfoTabs';
 const HelpPage = () => {
   return (
     <>
@@ -12,6 +13,7 @@ const HelpPage = () => {
       <HowWorks className={styles.heroContainer} />
       <OurServices className={[styles.servicesContainer, styles.servicesHeader, styles.cardsList]} />
       <Steps className={[styles.stepsContainer, styles.stepsHeader, styles.stepsInnerContainer, styles.innerItem]}/>
+      <InfoTabs className={[styles.tabsContainer, styles.tabsNav, styles.tabsList]}/>
       <Footer />
     </>
   );
