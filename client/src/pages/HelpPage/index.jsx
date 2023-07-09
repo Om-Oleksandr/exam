@@ -8,6 +8,7 @@ import Steps from '../../components/HelpPage/Steps';
 import InfoTabs from '../../components/HelpPage/InfoTabs';
 import GetStarted from '../../components/HelpPage/GetStarted';
 import Stats from '../../components/HelpPage/Stats';
+import Questions from '../../components/HelpPage/Questions';
 const HelpPage = () => {
   return (
     <>
@@ -40,6 +41,7 @@ const HelpPage = () => {
         ]}
       />
       <Stats className={styles.statsContainer}/>
+      <Questions className={[styles.questionsContainer, styles.questionsWrapper ,styles.offer, styles.consultation]}/>
       <Footer />
     </>
   );
