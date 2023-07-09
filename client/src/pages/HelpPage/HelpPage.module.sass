@@ -103,3 +103,51 @@ button
     padding: 0 0.9375rem
     @media(max-width: 992px)
         flex: 0 0 100%
+
+.startContainer
+    width: 100%
+    background-image: linear-gradient(150deg,#2d1582 0%,#19a0ff 100%)
+    background-repeat: repeat-x
+    position: relative
+    .startHeader
+        @extend %container
+        display: block
+        text-align: center
+        padding: 2rem 0.9375rem
+        position: relative
+        z-index: 1
+        h3
+            color: #00dffc
+            margin-bottom: 0.5rem
+            font:
+                size: 2rem
+                weight: 600
+            @media(max-width: 420px)
+                font-size: 1.55rem
+        p
+            color: #fff
+            font-size: 1.25rem
+            margin-bottom: 1rem
+        a
+            @include btn(#fff, 0.3125rem, true,#000)
+            @media(max-width: 482px)
+                width: 100%
+.firstSvg,
+.secondSvg
+    width: 208px
+    position: absolute
+
+.firstSvg
+    top: 0
+    left: 0
+
+.secondSvg
+    bottom: 0
+    right: 0
+
+.statsContainer
+    max-width: 1280px
+    margin: auto
+    padding: 4rem 0.9375rem
+    & > div
+        @extend %container

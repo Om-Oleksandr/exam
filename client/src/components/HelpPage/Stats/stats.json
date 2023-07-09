@@ -1,0 +1,17 @@
+[
+  {
+    "imgName": "stars.svg",
+    "content": "4.9 out of 5 stars from 25,000+ customers.",
+    "bold": ["4.9 out of 5 stars"]
+  },
+  {
+    "imgName": "img2.png",
+    "content": "Our branding community stands 200,000+ strong.",
+    "bold": ["200,000+"]
+  },
+  {
+    "imgName": "sharing-files.svg",
+    "content": "140+ Industries supported across more than 85 countries – and counting.",
+    "bold": ["140+ Industries", "85 countries"]
+  }
+]
