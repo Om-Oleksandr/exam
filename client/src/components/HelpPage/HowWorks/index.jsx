@@ -32,13 +32,13 @@ const HowWorks = props => {
     <>
       <div className={cx(styles.video, { [styles.display]: display })}>
         <iframe
+          title='video'
           ref={iFrameRef}
           src='https://player.vimeo.com/video/826948811?h=aac5a8441b&title=0&byline=0&portrait=0'
           width='640'
           height='360'
-          frameborder='0'
           allow='autoplay; fullscreen; picture-in-picture'
-          allowfullscreen
+          allowFullScreen
         ></iframe>
         <button onClick={closeVideo}></button>
       </div>
@@ -58,12 +58,12 @@ const HowWorks = props => {
             href='https://player.vimeo.com/video/826948811'
             onClick={playVideo}
           >
-            <img src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/play.svg`} />
+            <img src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/play.svg`} alt="play"/>
             play video
           </a>
         </div>
         <div className={styles.secondColumn}>
-          <img src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/hero.svg`} />
+          <img src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/hero.svg`} alt="man"/>
         </div>
       </section>
     </>

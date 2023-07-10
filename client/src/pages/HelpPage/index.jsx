@@ -9,6 +9,7 @@ import InfoTabs from '../../components/HelpPage/InfoTabs';
 import GetStarted from '../../components/HelpPage/GetStarted';
 import Stats from '../../components/HelpPage/Stats';
 import Questions from '../../components/HelpPage/Questions';
+import constants from '../../constants';
 const HelpPage = () => {
   return (
     <>
@@ -40,8 +41,56 @@ const HelpPage = () => {
           styles.secondSvg,
         ]}
       />
-      <Stats className={styles.statsContainer}/>
-      <Questions className={[styles.questionsContainer, styles.questionsWrapper ,styles.offer, styles.consultation]}/>
+      <Stats className={styles.statsContainer} />
+      <Questions
+        className={[
+          styles.questionsContainer,
+          styles.questionsWrapper,
+          styles.offer,
+          styles.consultation,
+        ]}
+      />
+      <section className={styles.sponsorsContainer}>
+        <div className={styles.sponsorsWrapper}>
+          <div className={styles.sponsorsHeader}>
+            <h6>Featured In</h6>
+          </div>
+          <div className={styles.sponsorsLogos}>
+            <div className={styles.sponsorLogo}>
+              <a href='google.com'>
+                <img
+                  src={`${constants.STATIC_IMAGES_PATH}sponsors/Forbes-inactive.png`}
+                  alt='sponsor'
+                />
+              </a>
+            </div>
+            <div className={styles.sponsorLogo}>
+              <a href='google.com'>
+                <img
+                  src={`${constants.STATIC_IMAGES_PATH}sponsors/the_next_web_inactive.png`}
+                  alt='sponsor'
+                />
+              </a>
+            </div>
+            <div className={styles.sponsorLogo}>
+              <a href='google.com'>
+                <img
+                  src={`${constants.STATIC_IMAGES_PATH}sponsors/chicago.png`}
+                  alt='sponsor'
+                />
+              </a>
+            </div>
+            <div className={styles.sponsorLogo}>
+              <a href='google.com'>
+                <img
+                  src={`${constants.STATIC_IMAGES_PATH}sponsors/mashable-inactive.png`}
+                  alt='sponsor'
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
       <Footer />
     </>
   );

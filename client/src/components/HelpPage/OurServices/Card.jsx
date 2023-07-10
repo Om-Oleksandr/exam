@@ -16,11 +16,10 @@ const Card = props => {
           </div>
           <h3>
             {cardInfo.title}
-            {console.log(cardInfo.title)}
           </h3>
           <p>{cardInfo.content}</p>
         </div>
-        <a href=''>{cardInfo.btnText}</a>
+        <a href='google.com'>{cardInfo.btnText}</a>
       </div>
     </article>
   );
