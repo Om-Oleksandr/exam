@@ -41,11 +41,14 @@
                 style: solid
                 color: #bfbfbf
                 radius: 0.2rem
+        form .inputError
+            outline: 1px solid crimson
 .reminder
     display: flex
     .radioSection
         width: auto
-        padding-left: 0.75rem
+        margin-left: 0.75rem
+        border-radius: 0.2rem
     label
         display: inline-block
         position: relative
@@ -53,6 +56,7 @@
         font-size: 1rem
         cursor: pointer
         user-select: none
+        width: 100%
         &::first-letter
             text-transform: uppercase
         input

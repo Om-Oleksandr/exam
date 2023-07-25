@@ -1,11 +1,12 @@
 import React from 'react';
-import { Field, Form, Formik } from 'formik';
-import MyDatePicker from './Date';
-
+import { ErrorMessage, Form, Formik } from 'formik';
+import Schems from '../../utils/validators/validationSchems';
+import CustomField from './CustomField';
+import RadioGroup from './RadioGroup';
 const AddForm = props => {
   const {
     onSubmit,
-    className: [form, reminder, radio],
+    className: [form, reminder, radio, inputError],
   } = props;
   return (
     <div className={form}>
@@ -16,45 +17,25 @@ const AddForm = props => {
           reminder: '',
           reminderType: '',
         }}
+        validationSchema={Schems.EventSchema}
         onSubmit={onSubmit}
       >
         <Form autoComplete='off'>
           <div>
-            <span>event</span>
-            <Field name='name'/>
+            <span>event {<ErrorMessage name='name' />}</span>
+            <CustomField name='name' inputError={inputError} />
           </div>
 
           <div>
-            <span>date</span>
-            <MyDatePicker name='date' />
+            <span>date {<ErrorMessage name='date' />}</span>
+            <CustomField name='date' inputError={inputError} />
           </div>
 
           <div>
-            <span>reminder</span>
+            <span>reminder {<ErrorMessage name='reminder' />}</span>
             <div className={reminder}>
-              <Field name='reminder'/>
-              <div className={radio}>
-                <label htmlFor='days'>
-                  <Field
-                    type='radio'
-                    name='reminderType'
-                    value='days'
-                    id='days'
-                  />
-                  days
-                  <span></span>
-                </label>
-                <label htmlFor='hours'>
-                  <Field
-                    type='radio'
-                    name='reminderType'
-                    value='hours'
-                    id='hours'
-                  />
-                  hours
-                  <span></span>
-                </label>
-              </div>
+              <CustomField name='reminder' inputError={inputError} />
+              <RadioGroup classNames={[radio, inputError]}/>
             </div>
           </div>
 

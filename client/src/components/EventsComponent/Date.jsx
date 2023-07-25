@@ -2,8 +2,8 @@ import React from 'react';
 import { useField } from 'formik';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-
-const MyDatePicker = ({ name = '' }) => {
+const MyDatePicker = props => {
+  const { name, className } = props;
   const [field, meta, helpers] = useField(name);
 
   const { value } = meta;
@@ -11,6 +11,7 @@ const MyDatePicker = ({ name = '' }) => {
 
   return (
     <DatePicker
+      className={className}
       {...field}
       selected={value}
       showTimeSelect
