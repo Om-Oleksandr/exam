@@ -15,8 +15,9 @@ import CONSTANTS from '../../constants';
 import styles from './OfferBox.module.sass';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './confirmStyle.css';
+import { setModeratorDecision } from '../../store/slices/contestByIdSlice';
 
-const OfferBox = (props) => {
+const OfferBox = props => {
   const findConversationInfo = () => {
     const { messagesPreview, id } = props;
     const participants = [id, props.data.User.id];
@@ -70,7 +71,16 @@ const OfferBox = (props) => {
     });
   };
 
-  const changeMark = (value) => {
+  const moderDecision = ({ target }) => {
+    const updateInfo = {
+      id: props.data.id,
+      contestId: props.contestData.id,
+      status: target.value,
+    };
+    props.setModeratorDecision(updateInfo);
+  };
+
+  const changeMark = value => {
     props.clearError();
     props.changeMark({
       mark: value,
@@ -106,7 +116,7 @@ const OfferBox = (props) => {
     });
   };
 
-  const { data, role, id, contestType } = props;
+  const { data, role, id, contestData } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
   return (
     <div className={styles.offerContainer}>
@@ -120,7 +130,7 @@ const OfferBox = (props) => {
                   ? CONSTANTS.ANONYM_IMAGE_PATH
                   : `${CONSTANTS.publicURL}${avatar}`
               }
-              alt="user"
+              alt='user'
             />
             <div className={styles.nameAndEmail}>
               <span>{`${firstName} ${lastName}`}</span>
@@ -135,19 +145,19 @@ const OfferBox = (props) => {
               fullSymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
+                  alt='star'
                 />
               }
               placeholderSymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
+                  alt='star'
                 />
               }
               emptySymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star-outline.png`}
-                  alt="star-outline"
+                  alt='star-outline'
                 />
               }
               readonly
@@ -155,7 +165,7 @@ const OfferBox = (props) => {
           </div>
         </div>
         <div className={styles.responseConainer}>
-          {contestType === CONSTANTS.LOGO_CONTEST ? (
+          {contestData.contestType === CONSTANTS.LOGO_CONTEST ? (
             <img
               onClick={() =>
                 props.changeShowImage({
@@ -165,30 +175,30 @@ const OfferBox = (props) => {
               }
               className={styles.responseLogo}
               src={`${CONSTANTS.publicURL}${data.fileName}`}
-              alt="logo"
+              alt='logo'
             />
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {data.User.id !== id && (
+          {data.User.id !== id && role !== CONSTANTS.MODERATOR && (
             <Rating
               fractions={2}
               fullSymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
+                  alt='star'
                 />
               }
               placeholderSymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star.png`}
-                  alt="star"
+                  alt='star'
                 />
               }
               emptySymbol={
                 <img
                   src={`${CONSTANTS.STATIC_IMAGES_PATH}star-outline.png`}
-                  alt="star"
+                  alt='star'
                 />
               }
               onClick={changeMark}
@@ -196,11 +206,27 @@ const OfferBox = (props) => {
             />
           )}
         </div>
-        {role !== CONSTANTS.CREATOR && (
-          <i onClick={goChat} className="fas fa-comments" />
+        {role !== CONSTANTS.CREATOR && role !== CONSTANTS.MODERATOR && (
+          <i onClick={goChat} className='fas fa-comments' />
+        )}
+        {role === CONSTANTS.MODERATOR && (
+          <div>
+            <button
+              onClick={moderDecision}
+              value={CONSTANTS.APPROVE_STATUSES.APPROVED}
+            >
+              Approve
+            </button>
+            <button
+              onClick={moderDecision}
+              value={CONSTANTS.APPROVE_STATUSES.REJECTED}
+            >
+              Reject
+            </button>
+          </div>
         )}
       </div>
-      {props.needButtons(data.status) && (
+      {props.needButtons(data.buyerDecision) && (
         <div className={styles.btnsContainer}>
           <div onClick={resolveOffer} className={styles.resolveBtn}>
             Resolve
@@ -214,14 +240,15 @@ const OfferBox = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  changeMark: (data) => dispatch(changeMark(data)),
+const mapDispatchToProps = dispatch => ({
+  changeMark: data => dispatch(changeMark(data)),
   clearError: () => dispatch(clearChangeMarkError()),
-  goToExpandedDialog: (data) => dispatch(goToExpandedDialog(data)),
-  changeShowImage: (data) => dispatch(changeShowImage(data)),
+  goToExpandedDialog: data => dispatch(goToExpandedDialog(data)),
+  changeShowImage: data => dispatch(changeShowImage(data)),
+  setModeratorDecision: data => dispatch(setModeratorDecision(data)),
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { changeMarkError } = state.contestByIdStore;
   const { id, role } = state.userStore.data;
   const { messagesPreview } = state.chatStore;

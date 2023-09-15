@@ -25,11 +25,11 @@ import 'react-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
 
 class ContestPage extends React.Component {
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.changeEditContest(false);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.getData();
   }
 
@@ -38,22 +38,35 @@ class ContestPage extends React.Component {
     this.props.getData({ contestId: params.id });
   };
 
-  setOffersList = () => {
-    const array = [];
-    for (let i = 0; i < this.props.contestByIdStore.offers.length; i++) {
-      array.push(
-        <OfferBox
-          data={this.props.contestByIdStore.offers[i]}
-          key={this.props.contestByIdStore.offers[i].id}
-          needButtons={this.needButtons}
-          setOfferStatus={this.setOfferStatus}
-          contestType={this.props.contestByIdStore.contestData.contestType}
-          date={new Date()}
-        />
-      );
-    }
-    return array.length !== 0 ? (
-      array
+  mapOffers = elem => (
+    <OfferBox
+      data={elem}
+      key={elem.id}
+      needButtons={this.needButtons}
+      setOfferStatus={this.setOfferStatus}
+      contestData={this.props.contestByIdStore.contestData}
+      date={new Date()}
+    />
+  );
+
+  setOffersList = role => {
+    let offersList;
+    const allOffers = [...this.props.contestByIdStore.offers];
+    const approvedOffers = allOffers.filter(
+      offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
+    );
+    const moderatorOffers = allOffers.filter(
+      offer =>
+        offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.PENDING
+    )
+    offersList =
+      role === CONSTANTS.CUSTOMER
+        ? approvedOffers.map(this.mapOffers)
+        : role === CONSTANTS.MODERATOR
+        ? moderatorOffers.map(this.mapOffers)
+        : allOffers.map(this.mapOffers);
+    return offersList.length > 0 ? (
+      offersList
     ) : (
       <div className={styles.notFound}>
         There is no suggestion at this moment
@@ -61,7 +74,7 @@ class ContestPage extends React.Component {
     );
   };
 
-  needButtons = (offerStatus) => {
+  needButtons = offerStatus => {
     const contestCreatorId = this.props.contestByIdStore.contestData.User.id;
     const userId = this.props.userStore.data.id;
     const contestStatus = this.props.contestByIdStore.contestData.status;
@@ -86,7 +99,7 @@ class ContestPage extends React.Component {
     this.props.setOfferStatus(obj);
   };
 
-  findConversationInfo = (interlocutorId) => {
+  findConversationInfo = interlocutorId => {
     const { messagesPreview } = this.props.chatStore;
     const { id } = this.props.userStore.data;
     const participants = [id, interlocutorId];
@@ -114,7 +127,7 @@ class ContestPage extends React.Component {
     });
   };
 
-  render() {
+  render () {
     const { role } = this.props.userStore.data;
     const {
       contestByIdStore,
@@ -133,6 +146,9 @@ class ContestPage extends React.Component {
       offers,
       setOfferStatusError,
     } = contestByIdStore;
+    const totalEntriesForCustomer = offers.filter(
+      offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
+    ).length;
     return (
       <div>
         {/* <Chat/> */}
@@ -197,13 +213,19 @@ class ContestPage extends React.Component {
                       clearError={clearSetOfferStatusError}
                     />
                   )}
-                  <div className={styles.offers}>{this.setOffersList()}</div>
+                  <div className={styles.offers}>
+                    {this.setOffersList(role)}
+                  </div>
                 </div>
               )}
             </div>
             <ContestSideBar
               contestData={contestData}
-              totalEntries={offers.length}
+              totalEntries={
+                role === CONSTANTS.CUSTOMER
+                  ? totalEntriesForCustomer
+                  : offers.length
+              }
             />
           </div>
         )}
@@ -212,19 +234,19 @@ class ContestPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { contestByIdStore, userStore, chatStore } = state;
   return { contestByIdStore, userStore, chatStore };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getData: (data) => dispatch(getContestById(data)),
-  setOfferStatus: (data) => dispatch(setOfferStatus(data)),
+const mapDispatchToProps = dispatch => ({
+  getData: data => dispatch(getContestById(data)),
+  setOfferStatus: data => dispatch(setOfferStatus(data)),
   clearSetOfferStatusError: () => dispatch(clearSetOfferStatusError()),
-  goToExpandedDialog: (data) => dispatch(goToExpandedDialog(data)),
-  changeEditContest: (data) => dispatch(changeEditContest(data)),
-  changeContestViewMode: (data) => dispatch(changeContestViewMode(data)),
-  changeShowImage: (data) => dispatch(changeShowImage(data)),
+  goToExpandedDialog: data => dispatch(goToExpandedDialog(data)),
+  changeEditContest: data => dispatch(changeEditContest(data)),
+  changeContestViewMode: data => dispatch(changeContestViewMode(data)),
+  changeShowImage: data => dispatch(changeShowImage(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContestPage);

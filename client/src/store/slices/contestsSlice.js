@@ -31,6 +31,14 @@ export const getContests = decorateAsyncThunk({
   },
 });
 
+export const getModeratorContests = decorateAsyncThunk({
+  key: `${CONTESTS_SLICE_NAME}/getModeratorContests`,
+  thunk: async () => {
+    const { data } = await restController.getModeratorContests();
+    return data;
+  },
+});
+
 const reducers = {
   clearContestsList: state => {
     state.error = null;
@@ -60,6 +68,17 @@ const extraReducers = builder => {
     state.error = payload;
     state.contests = [];
   });
+
+  builder.addCase(getModeratorContests.pending, pendingReducer);
+  builder.addCase(getModeratorContests.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
+    state.contests = [...payload.filteredContests];
+  });
+  builder.addCase(getModeratorContests.rejected, (state, { payload }) => {
+    state.isFetching = false;
+    state.error = payload;
+    state.contests = [];
+  });
 };
 
 const contestsSlice = createSlice({
@@ -71,10 +90,7 @@ const contestsSlice = createSlice({
 
 const { actions, reducer } = contestsSlice;
 
-export const {
-  clearContestsList,
-  setNewCustomerFilter,
-  setNewCreatorFilter,
-} = actions;
+export const { clearContestsList, setNewCustomerFilter, setNewCreatorFilter } =
+  actions;
 
 export default reducer;

@@ -1,4 +1,7 @@
-
+const CONSTANTS =  require('./../constants')
+const {
+  APPROVE_STATUSES: { APPROVED, REJECTED, PENDING },
+} = CONSTANTS;
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Offers', {
@@ -36,10 +39,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      status: {
+      buyerDecision: {
         type: Sequelize.STRING,
         allowNull: true,
         defaultValue: 'pending',
+      },
+      approvedStatus: {
+        type: Sequelize.ENUM(APPROVED, REJECTED, PENDING),
+        allowNull: false,
+        defaultValue: PENDING,
       },
     });
   },

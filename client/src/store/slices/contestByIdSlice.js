@@ -5,6 +5,7 @@ import {
   decorateAsyncThunk,
   rejectedReducer,
   createExtraReducers,
+  pendingReducer,
 } from '../../utils/store';
 
 const CONTEST_BY_ID_SLICE_NAME = 'getContestById';
@@ -85,13 +86,13 @@ const setOfferStatusExtraReducers = createExtraReducers({
   thunk: setOfferStatus,
   fulfilledReducer: (state, { payload }) => {
     state.offers.forEach(offer => {
-      if (payload.status === CONSTANTS.OFFER_STATUS_WON) {
-        offer.status =
+      if (payload.buyerDecision === CONSTANTS.OFFER_STATUS_WON) {
+        offer.buyerDecision =
           payload.id === offer.id
             ? CONSTANTS.OFFER_STATUS_WON
             : CONSTANTS.OFFER_STATUS_REJECTED;
       } else if (payload.id === offer.id) {
-        offer.status = CONSTANTS.OFFER_STATUS_REJECTED;
+        offer.buyerDecision = CONSTANTS.OFFER_STATUS_REJECTED;
       }
     });
     state.error = null;
@@ -125,6 +126,14 @@ const changeMarkExtraReducers = createExtraReducers({
   },
   rejectedReducer: (state, { payload }) => {
     state.changeMarkError = payload;
+  },
+});
+
+export const setModeratorDecision = decorateAsyncThunk({
+  key: `${CONTEST_BY_ID_SLICE_NAME}/setModeratorDecision`,
+  thunk: async (status) => {
+    const { data } = await restController.setModeratorDecision(status);
+    return data;
   },
 });
 
@@ -163,6 +172,17 @@ const extraReducers = builder => {
   addOfferExtraReducers(builder);
   setOfferStatusExtraReducers(builder);
   changeMarkExtraReducers(builder);
+
+  builder.addCase(setModeratorDecision.pending, pendingReducer);
+  builder.addCase(setModeratorDecision.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
+    state.offers = [...payload.contestOffers];
+  });
+  builder.addCase(setModeratorDecision.rejected, (state, { payload }) => {
+    state.isFetching = false;
+    state.error = payload;
+    state.offers = [];
+  });
 };
 
 const contestByIdSlice = createSlice({
