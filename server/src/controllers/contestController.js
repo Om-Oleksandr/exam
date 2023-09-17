@@ -322,25 +322,25 @@ module.exports.getContests = (req, res, next) => {
 
 module.exports.getModeratorContests = async (req, res, next) => {
   try {
+    const { offset, limit } = req.headers;
     const contests = await db.Contests.findAll({
       include: [
         {
           model: db.Offers,
+          where: { approvedStatus: CONSTANTS.APPROVE_STATUSES.PENDING },
           attributes: ['id', 'approvedStatus'],
         },
       ],
+      order: [['id', 'ASC']],
+      offset: offset - 1 <= 0 ? 0 : offset,
+      limit: limit,
     });
     contests.forEach(contest => {
       contest.dataValues.count = contest.dataValues.Offers.filter(
         offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.PENDING
       ).length;
     });
-    const filteredContests = contests.filter(
-      contest =>
-        contest.dataValues.count > 0 &&
-        contest.status === CONSTANTS.CONTEST_STATUS_ACTIVE
-    );
-    res.send({ filteredContests });
+    res.send({ contests });
   } catch (error) {
     next(error);
   }
@@ -354,7 +354,10 @@ module.exports.setModeratorDecision = async (req, res, next) => {
       { where: { id: body.id } }
     );
     const contestOffers = await db.Offers.findAll({
-      where: { contestId: body.contestId, approvedStatus: CONSTANTS.APPROVE_STATUSES.PENDING },
+      where: {
+        contestId: body.contestId,
+        approvedStatus: CONSTANTS.APPROVE_STATUSES.PENDING,
+      },
     });
     res.send({ contestOffers });
   } catch (error) {

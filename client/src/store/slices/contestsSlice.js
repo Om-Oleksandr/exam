@@ -33,8 +33,8 @@ export const getContests = decorateAsyncThunk({
 
 export const getModeratorContests = decorateAsyncThunk({
   key: `${CONTESTS_SLICE_NAME}/getModeratorContests`,
-  thunk: async () => {
-    const { data } = await restController.getModeratorContests();
+  thunk: async (params) => {
+    const { data } = await restController.getModeratorContests(params);
     return data;
   },
 });
@@ -72,7 +72,7 @@ const extraReducers = builder => {
   builder.addCase(getModeratorContests.pending, pendingReducer);
   builder.addCase(getModeratorContests.fulfilled, (state, { payload }) => {
     state.isFetching = false;
-    state.contests = [...payload.filteredContests];
+    state.contests = [...payload.contests];
   });
   builder.addCase(getModeratorContests.rejected, (state, { payload }) => {
     state.isFetching = false;
