@@ -40,7 +40,7 @@ router.post(
   contestController.getCustomersContests
 );
 router.get(
-  '/get-all-contest',
+  '/get-moderator-contests',
   checkToken.checkToken,
   contestController.getModeratorContests
 );

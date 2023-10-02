@@ -1,10 +1,30 @@
-.contestsContainer
+.container
     width: 100%
     max-width: 1200px
+    min-height: 80vh
     margin: auto
-.notFound
-    color: #455a89
-    font-size: 20px
-    margin-top: 40px
-    width: 100%
-    text-align: center
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    .contestsContainer
+        width: 100%
+        .notFound
+            color: #455a89
+            font-size: 20px
+            margin-top: 40px
+            width: 100%
+            text-align: center
+    .buttonsContainer
+        align-self: center
+        font-size: 22px
+        span
+            padding: 0 0.625rem
+        button
+            border: none
+            color: #6b8ab1
+            font-weight: 700
+            &:not(.disabled)
+                cursor: pointer
+            &.disabled
+                opacity: 0.5
+                pointer-events: none

@@ -18,6 +18,7 @@ const initialState = {
     ownEntries: false,
   },
   haveMore: true,
+  totalContests: null
 };
 
 export const getContests = decorateAsyncThunk({
@@ -72,7 +73,8 @@ const extraReducers = builder => {
   builder.addCase(getModeratorContests.pending, pendingReducer);
   builder.addCase(getModeratorContests.fulfilled, (state, { payload }) => {
     state.isFetching = false;
-    state.contests = [...payload.contests];
+    state.contests = [...payload.data.contests];
+    state.totalContests = payload.data.totalContests
   });
   builder.addCase(getModeratorContests.rejected, (state, { payload }) => {
     state.isFetching = false;

@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import cx from 'classnames';
 import { getModeratorContests } from '../../store/slices/contestsSlice';
 import ContestBox from '../ContestBox/ContestBox';
 import styles from './ModeratorDashboard.module.sass';
-
 const ModeratorDashboard = props => {
-  const { contests } = useSelector(state => state.contestsList);
-  console.log(contests);
-  const [limit, setLimit] = useState(5);
-  const [offset, setOffset] = useState(0);
+  const { contests, totalContests } = useSelector(state => state.contestsList);
+  const [limit] = useState(5);
   const [page, setPage] = useState(1);
-  const totalItems = contests.length;
-  const totalPages =
-    totalItems % limit === 0 ? totalItems / limit : totalItems / limit + 1;
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getModeratorContests({ offset: offset, limit: limit }));
+    dispatch(getModeratorContests({ page, limit: limit }));
     return () => {};
-  }, [dispatch, limit, offset]);
+  }, [dispatch, limit, page]);
   const goToExtended = contestId => {
     props.history.push(`/contest/${contestId}`);
   };
@@ -29,29 +24,42 @@ const ModeratorDashboard = props => {
   const handlePrev = () => {
     if (page > 1) {
       setPage(page => page - 1);
-      setOffset(offset => offset - limit);
     }
   };
   const handleNext = () => {
-    if (page < totalPages) {
+    if (totalContests >= limit) {
       setPage(page => page + 1);
-      setOffset(offset => offset + limit);
     }
   };
-
   return (
-    <div className={styles.contestsContainer}>
-      <div>
+    <div className={styles.container}>
+      <div className={styles.contestsContainer}>
         {contests.length > 0 ? (
           <ul>{contests.map(mapContests)}</ul>
         ) : (
           <div className={styles.notFound}>There is no active contests</div>
         )}
       </div>
-      <div>
-        <button onClick={handlePrev}>prev</button>
+      <div className={styles.buttonsContainer}>
+        <button
+          onClick={handlePrev}
+          className={cx({ [styles.disabled]: page === 1 })}
+        >
+          {'<'}
+        </button>
         <span>{page}</span>
-        <button onClick={handleNext}>next</button>
+        <button
+          onClick={handleNext}
+          className={cx({
+            [styles.disabled]:
+              page ===
+              (totalContests % limit === 0
+                ? totalContests / limit
+                : Math.floor(totalContests / limit) + 1),
+          })}
+        >
+          {'>'}
+        </button>
       </div>
     </div>
   );

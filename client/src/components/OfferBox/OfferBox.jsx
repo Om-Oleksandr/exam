@@ -10,6 +10,7 @@ import {
   changeMark,
   clearChangeMarkError,
   changeShowImage,
+  changeValidOffers,
 } from '../../store/slices/contestByIdSlice';
 import CONSTANTS from '../../constants';
 import styles from './OfferBox.module.sass';
@@ -72,12 +73,24 @@ const OfferBox = props => {
   };
 
   const moderDecision = ({ target }) => {
+    props.setValidOffers(props.contestData.validOffers);
+    const {
+      paginationData: { limit, page },
+      handlePage,
+    } = props;
+
     const updateInfo = {
       id: props.data.id,
       contestId: props.contestData.id,
       status: target.value,
+      limit,
+      page: contestData.offers.length === 1 && page !== 1 ? page - 1 : page,
     };
-    props.setModeratorDecision(updateInfo);
+    props.setModeratorDecision(updateInfo).then(() => {
+      if (contestData.offers.length === 1 && page !== 1) {
+        handlePage();
+      }
+    });
   };
 
   const changeMark = value => {
@@ -119,7 +132,9 @@ const OfferBox = props => {
   const { data, role, id, contestData } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
   return (
-    <div className={styles.offerContainer}>
+    <div
+      className={styles.offerContainer}
+    >
       {offerStatus()}
       <div className={styles.mainInfoContainer}>
         <div className={styles.userInfo}>
@@ -246,6 +261,7 @@ const mapDispatchToProps = dispatch => ({
   goToExpandedDialog: data => dispatch(goToExpandedDialog(data)),
   changeShowImage: data => dispatch(changeShowImage(data)),
   setModeratorDecision: data => dispatch(setModeratorDecision(data)),
+  setValidOffers: data => dispatch(changeValidOffers(data)),
 });
 
 const mapStateToProps = state => {

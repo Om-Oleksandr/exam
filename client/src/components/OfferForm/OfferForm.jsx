@@ -5,6 +5,7 @@ import CONTANTS from '../../constants';
 import {
   addOffer,
   clearAddOfferError,
+  getContestById,
 } from '../../store/slices/contestByIdSlice';
 import styles from './OfferForm.module.sass';
 import ImageUpload from '../InputComponents/ImageUpload/ImageUpload';
@@ -49,7 +50,13 @@ const OfferForm = props => {
     data.append('contestType', contestType);
     data.append('offerData', values.offerData);
     data.append('customerId', customerId);
-    props.setNewOffer(data);
+    props.setNewOffer(data).then(() => {
+      props.getContest({
+        contestId: props.contestId,
+        page: props.paginationData.page,
+        limit: props.paginationData.limit,
+      });
+    });
     resetForm();
   };
 
@@ -90,6 +97,7 @@ const OfferForm = props => {
 const mapDispatchToProps = dispatch => ({
   setNewOffer: data => dispatch(addOffer(data)),
   clearOfferError: () => dispatch(clearAddOfferError()),
+  getContest: data => dispatch(getContestById(data)),
 });
 
 const mapStateToProps = state => {

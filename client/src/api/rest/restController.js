@@ -37,8 +37,8 @@ export const getCustomersContests = data =>
   );
 
 export const getModeratorContests = params =>
-  http.get('get-all-contest', {
-    headers: { offset: params.offset, limit: params.limit },
+  http.get('get-moderator-contests', {
+    headers: { page: params.page, limit: params.limit },
   });
 
 export const setModeratorDecision = data =>
@@ -67,5 +67,7 @@ export const getContestById = data =>
   http.get('getContestById', {
     headers: {
       contestId: data.contestId,
+      page: data.page,
+      limit: data.limit
     },
   });

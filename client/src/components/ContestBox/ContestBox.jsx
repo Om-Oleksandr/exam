@@ -24,7 +24,7 @@ const ContestBox = props => {
     string.charAt(0).toUpperCase() + string.slice(1);
 
   const {
-    data: { id, title, contestType, prize, count },
+    data: { id, title, contestType, prize, validOffers },
     goToExtended,
   } = props;
   return (
@@ -74,7 +74,7 @@ const ContestBox = props => {
               src={`${CONSTANTS.STATIC_IMAGES_PATH}entrieImage.png`}
               alt='logo'
             />
-            <span>{count}</span>
+            <span>{validOffers}</span>
           </div>
           <span>Entries</span>
         </div>

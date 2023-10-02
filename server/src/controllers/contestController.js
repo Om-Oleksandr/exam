@@ -5,7 +5,7 @@ const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
 const UtilFunctions = require('../utils/functions');
 const CONSTANTS = require('../constants');
-
+const { APPROVED, PENDING, REJECTED } = CONSTANTS.APPROVE_STATUSES;
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
   try {
@@ -40,8 +40,12 @@ module.exports.dataForContest = async (req, res, next) => {
 
 module.exports.getContestById = async (req, res, next) => {
   try {
+    const { contestid, limit, page } = req.headers;
+    const { role, userId } = req.tokenData;
+    console.log(role);
+
     let contestInfo = await db.Contests.findOne({
-      where: { id: req.headers.contestid },
+      where: { id: contestid },
       order: [[db.Offers, 'id', 'asc']],
       include: [
         {
@@ -54,10 +58,7 @@ module.exports.getContestById = async (req, res, next) => {
         {
           model: db.Offers,
           required: false,
-          where:
-            req.tokenData.role === CONSTANTS.CREATOR
-              ? { userId: req.tokenData.userId }
-              : {},
+          where: role === CONSTANTS.CREATOR ? { userId } : {},
           attributes: { exclude: ['userId', 'contestId'] },
           include: [
             {
@@ -70,22 +71,76 @@ module.exports.getContestById = async (req, res, next) => {
             {
               model: db.Ratings,
               required: false,
-              where: { userId: req.tokenData.userId },
+              where: { userId },
               attributes: { exclude: ['userId', 'offerId'] },
             },
           ],
         },
       ],
     });
+
     contestInfo = contestInfo.get({ plain: true });
-    contestInfo.Offers.forEach(offer => {
+    const allOffers = await db.Offers.findAll({
+      where: {
+        contestId: contestInfo.id,
+      },
+    });
+    contestInfo.validOffers =
+      role === CONSTANTS.CREATOR
+        ? allOffers.length
+        : contestInfo.Offers.filter(
+            offer =>
+              offer.approvedStatus ===
+              (role === CONSTANTS.MODERATOR ? PENDING : APPROVED)
+          ).length;
+    console.log(contestInfo.validOffers);
+
+    const offers = await db.Offers.findAll({
+      where: {
+        contestId: contestInfo.id,
+        approvedStatus:
+          role === CONSTANTS.MODERATOR
+            ? PENDING
+            : role === CONSTANTS.CUSTOMER
+            ? APPROVED
+            : { [db.Sequelize.Op.or]: [PENDING, APPROVED, REJECTED] },
+      },
+      order:
+        role === CONSTANTS.CUSTOMER
+          ? [['buyerDecision', 'asc']]
+          : [['id', 'desc']],
+      offset: (page - 1) * limit,
+      limit: limit,
+      attributes: { exclude: ['userId', 'contestId'] },
+      include: [
+        {
+          model: db.Users,
+          required: true,
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken'],
+          },
+        },
+        {
+          model: db.Ratings,
+          required: false,
+          where: { userId },
+          attributes: { exclude: ['userId', 'offerId'] },
+        },
+      ],
+    });
+
+    contestInfo.Offers = offers.map(offer => {
       if (offer.Rating) {
         offer.mark = offer.Rating.mark;
       }
       delete offer.Rating;
+      return offer;
     });
+
+    // console.log(contestInfo);
     res.send(contestInfo);
   } catch (e) {
+    console.log(e);
     next(new ServerError());
   }
 };
@@ -264,13 +319,12 @@ module.exports.getCustomersContests = (req, res, next) => {
     ],
   })
     .then(contests => {
-      contests.forEach(
-        contest =>
-          (contest.dataValues.count = contest.dataValues.Offers.filter(
-            offer =>
-              offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
-          ).length)
-      );
+      contests.forEach(contest => {
+        contest.dataValues.validOffers = contest.dataValues.Offers.filter(
+          offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
+        ).length;
+        delete contest.dataValues.Offers;
+      });
       let haveMore = true;
       if (contests.length === 0) {
         haveMore = false;
@@ -302,13 +356,10 @@ module.exports.getContests = (req, res, next) => {
     ],
   })
     .then(contests => {
-      contests.forEach(
-        contest =>
-          (contest.dataValues.count = contest.dataValues.Offers.filter(
-            offer =>
-              offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
-          ).length)
-      );
+      contests.forEach(contest => {
+        contest.dataValues.validOffers = contest.dataValues.Offers.length;
+        delete contest.dataValues.Offers;
+      });
       let haveMore = true;
       if (contests.length === 0) {
         haveMore = false;
@@ -322,25 +373,28 @@ module.exports.getContests = (req, res, next) => {
 
 module.exports.getModeratorContests = async (req, res, next) => {
   try {
-    const { offset, limit } = req.headers;
-    const contests = await db.Contests.findAll({
+    const { page, limit } = req.headers;
+    console.log(req.params);
+
+    const { count, rows } = await db.Contests.findAndCountAll({
       include: [
         {
           model: db.Offers,
           where: { approvedStatus: CONSTANTS.APPROVE_STATUSES.PENDING },
-          attributes: ['id', 'approvedStatus'],
+          attributes: ['id'],
         },
       ],
       order: [['id', 'ASC']],
-      offset: offset - 1 <= 0 ? 0 : offset,
+      offset: (page - 1) * limit,
       limit: limit,
+      group: ['Contests.id'],
     });
-    contests.forEach(contest => {
-      contest.dataValues.count = contest.dataValues.Offers.filter(
-        offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.PENDING
-      ).length;
-    });
-    res.send({ contests });
+    rows.forEach(
+      row => (row.dataValues.validOffers = row.dataValues.Offers.length)
+    );
+    console.log(count);
+    console.log(rows);
+    res.send({ data: { contests: rows, totalContests: count.length } });
   } catch (error) {
     next(error);
   }
@@ -351,13 +405,27 @@ module.exports.setModeratorDecision = async (req, res, next) => {
     const { body } = req;
     await db.Offers.update(
       { approvedStatus: body.status },
-      { where: { id: body.id } }
+      {
+        where: { id: body.id },
+      }
     );
     const contestOffers = await db.Offers.findAll({
       where: {
         contestId: body.contestId,
         approvedStatus: CONSTANTS.APPROVE_STATUSES.PENDING,
       },
+      include: [
+        {
+          model: db.Users,
+          required: true,
+          attributes: {
+            exclude: ['password', 'role', 'balance', 'accessToken'],
+          },
+        },
+      ],
+      order: [['id', 'ASC']],
+      offset: (body.page - 1) * body.limit,
+      limit: body.limit,
     });
     res.send({ contestOffers });
   } catch (error) {
