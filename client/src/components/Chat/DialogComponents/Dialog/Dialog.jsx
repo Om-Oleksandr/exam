@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import className from 'classnames';
 import {
-  getDialogMessages,
   clearMessageList,
+  getDialogMessagesSql,
 } from '../../../../store/slices/chatSlice';
 import ChatHeader from '../../ChatComponents/ChatHeader/ChatHeader';
 import styles from './Dialog.module.sass';
 import ChatInput from '../../ChatComponents/ChatInut/ChatInput';
 
 class Dialog extends React.Component {
-  componentDidMount() {
-    this.props.getDialog({ interlocutorId: this.props.interlocutor.id });
+  componentDidMount () {
+    this.props.getSqlDialog({ interlocutorId: this.props.interlocutor.id });
     this.scrollToBottom();
   }
 
@@ -22,16 +22,17 @@ class Dialog extends React.Component {
     this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (nextProps.interlocutor.id !== this.props.interlocutor.id)
-      this.props.getDialog({ interlocutorId: nextProps.interlocutor.id });
+  componentWillReceiveProps (nextProps, nextContext) {
+    if (nextProps.interlocutor.id !== this.props.interlocutor.id) {
+      this.props.getSqlDialog({ interlocutorId: nextProps.interlocutor.id })
+    }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.clearMessageList();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.messagesEnd.current) this.scrollToBottom();
   }
 
@@ -72,14 +73,14 @@ class Dialog extends React.Component {
     const userIndex = participants.indexOf(userId);
     let message;
     if (chatData && blackList[userIndex]) {
-      message = 'You block him';
+      message = 'You blocked them';
     } else if (chatData && blackList.includes(true)) {
-      message = 'He block you';
+      message = 'They blocked you';
     }
     return <span className={styles.messageBlock}>{message}</span>;
   };
 
-  render() {
+  render () {
     const { chatData, userId } = this.props;
     return (
       <>
@@ -96,11 +97,11 @@ class Dialog extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => state.chatStore;
+const mapStateToProps = state => state.chatStore;
 
-const mapDispatchToProps = (dispatch) => ({
-  getDialog: (data) => dispatch(getDialogMessages(data)),
+const mapDispatchToProps = dispatch => ({
   clearMessageList: () => dispatch(clearMessageList()),
+  getSqlDialog: data => dispatch(getDialogMessagesSql(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dialog);

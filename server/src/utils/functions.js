@@ -2,7 +2,11 @@ const bd = require('../models');
 const CONSTANTS = require('../constants');
 
 module.exports.createWhereForAllContests = (
-  typeIndex, contestId, industry, awardSort) => {
+  typeIndex,
+  contestId,
+  industry,
+  awardSort
+) => {
   const object = {
     where: {},
     order: [],
@@ -21,7 +25,7 @@ module.exports.createWhereForAllContests = (
   }
   Object.assign(object.where, {
     status: {
-      [ bd.Sequelize.Op.or ]: [
+      [bd.Sequelize.Op.or]: [
         CONSTANTS.CONTEST_STATUS_FINISHED,
         CONSTANTS.CONTEST_STATUS_ACTIVE,
       ],
@@ -32,8 +36,25 @@ module.exports.createWhereForAllContests = (
 };
 
 function getPredicateTypes (index) {
-  return { [ bd.Sequelize.Op.or ]: [types[ index ].split(',')] };
+  return { [bd.Sequelize.Op.or]: [types[index].split(',')] };
 }
+
+module.exports.handleParticipants = (firstId, secondId) => {
+  const participant1 = firstId < secondId ? firstId : secondId;
+  const participant2 = firstId > secondId ? firstId : secondId;
+  return { participant1, participant2 };
+};
+
+module.exports.handleList = (chat, id, property, flag) => {
+  chat.participant1 === id
+    ? (chat[property][0] = flag)
+    : (chat[property][1] = flag);
+  chat.dataValues.participants = [chat.participant1, chat.participant2];
+  chat.changed(property, true);
+  delete chat.dataValues.participant1;
+  delete chat.dataValues.participant2;
+  return chat;
+};
 
 const types = [
   '',

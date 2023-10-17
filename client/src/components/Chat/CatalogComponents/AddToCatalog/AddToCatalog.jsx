@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form } from 'formik';
 import SelectInput from '../../../SelectInput/SelectInput';
-import { addChatToCatalog } from '../../../../store/slices/chatSlice';
+import { addChatToCatalogSql } from '../../../../store/slices/chatSlice';
 import styles from './AddToCatalog.module.sass';
 
 const AddToCatalog = (props) => {
@@ -19,14 +19,14 @@ const AddToCatalog = (props) => {
     const { catalogList } = props;
     const valueArray = [];
     catalogList.forEach((catalog) => {
-      valueArray.push(catalog._id);
+      valueArray.push(catalog.id);
     });
     return valueArray;
   };
 
   const click = (values) => {
     const { addChatId } = props;
-    props.addChatToCatalog({ chatId: addChatId, catalogId: values.catalogId });
+    props.addChatToCatalogSql({ chatId: addChatId, catalogId: values.catalogId });
   };
 
   const selectArray = getCatalogsNames();
@@ -61,7 +61,7 @@ const AddToCatalog = (props) => {
 const mapStateToProps = (state) => state.chatStore;
 
 const mapDispatchToProps = (dispatch) => ({
-  addChatToCatalog: (data) => dispatch(addChatToCatalog(data)),
+  addChatToCatalogSql: (data) => dispatch(addChatToCatalogSql(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToCatalog);

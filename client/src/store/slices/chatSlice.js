@@ -19,7 +19,7 @@ const initialState = {
   messages: [],
   error: null,
   isExpanded: false,
-  interlocutor: [],
+  interlocutor: null,
   messagesPreview: [],
   isShow: false,
   chatMode: CONSTANTS.NORMAL_PREVIEW_CHAT_MODE,
@@ -30,18 +30,19 @@ const initialState = {
 };
 
 //---------- getPreviewChat
-export const getPreviewChat = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/getPreviewChat`,
+
+export const getPreviewChatSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/getPreviewChatSql`,
   thunk: async () => {
-    const { data } = await restController.getPreviewChat();
+    const { data } = await restController.getPreviewChatSql();
     return data;
   },
 });
 
-const getPreviewChatExtraReducers = createExtraReducers({
-  thunk: getPreviewChat,
+const getPreviewChatSqlExtraReducers = createExtraReducers({
+  thunk: getPreviewChatSql,
   fulfilledReducer: (state, { payload }) => {
-    state.messagesPreview = payload;
+    state.messagesPreview = payload.conversations;
     state.error = null;
   },
   rejectedReducer: (state, { payload }) => {
@@ -51,16 +52,17 @@ const getPreviewChatExtraReducers = createExtraReducers({
 });
 
 //---------- getDialogMessages
-export const getDialogMessages = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/getDialogMessages`,
+
+export const getDialogMessagesSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/getDialogMessagesSql`,
   thunk: async payload => {
-    const { data } = await restController.getDialog(payload);
+    const { data } = await restController.getSqlDialog(payload);
     return data;
   },
 });
 
-const getDialogMessagesExtraReducers = createExtraReducers({
-  thunk: getDialogMessages,
+const getDialogMessagesSqlExtraReducers = createExtraReducers({
+  thunk: getDialogMessagesSql,
   fulfilledReducer: (state, { payload }) => {
     state.messages = payload.messages;
     state.interlocutor = payload.interlocutor;
@@ -73,24 +75,25 @@ const getDialogMessagesExtraReducers = createExtraReducers({
 });
 
 //---------- sendMessage
-export const sendMessage = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/sendMessage`,
+
+export const sendSqlMessage = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/sendSqlMessage`,
   thunk: async payload => {
-    const { data } = await restController.newMessage(payload);
+    const { data } = await restController.newSqlMessage(payload);
     return data;
   },
 });
 
-const sendMessageExtraReducers = createExtraReducers({
-  thunk: sendMessage,
+const sendSqlMessageExtraReducers = createExtraReducers({
+  thunk: sendSqlMessage,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
     let isNew = true;
     messagesPreview.forEach(preview => {
-      if (isEqual(preview.participants, payload.message.participants)) {
-        preview.text = payload.message.body;
-        preview.sender = payload.message.sender;
-        preview.createAt = payload.message.createdAt;
+      if (isEqual(preview.participants, payload.newMessage.participants)) {
+        preview.text = payload.newMessage.body;
+        preview.sender = payload.newMessage.sender;
+        preview.createAt = payload.newMessage.createdAt;
         isNew = false;
       }
     });
@@ -98,14 +101,14 @@ const sendMessageExtraReducers = createExtraReducers({
       messagesPreview.push(payload.preview);
     }
     const chatData = {
-      _id: payload.preview._id,
+      _id: payload.preview.id,
       participants: payload.preview.participants,
       favoriteList: payload.preview.favoriteList,
       blackList: payload.preview.blackList,
     };
     state.chatData = { ...state.chatData, ...chatData };
     state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message];
+    state.messages = [...state.messages, payload.newMessage];
   },
   rejectedReducer: (state, { payload }) => {
     state.error = payload;
@@ -113,23 +116,25 @@ const sendMessageExtraReducers = createExtraReducers({
 });
 
 //---------- changeChatFavorite
-export const changeChatFavorite = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/changeChatFavorite`,
+
+export const changeChatFavoriteSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/changeChatFavoriteSql`,
   thunk: async payload => {
-    const { data } = await restController.changeChatFavorite(payload);
+    const { data } = await restController.changeChatFavoriteSql(payload);
     return data;
   },
 });
 
-const changeChatFavoriteExtraReducers = createExtraReducers({
-  thunk: changeChatFavorite,
+const changeChatFavoriteExtraReducersSql = createExtraReducers({
+  thunk: changeChatFavoriteSql,
   fulfilledReducer: (state, { payload }) => {
+    console.log(payload);
     const { messagesPreview } = state;
     messagesPreview.forEach(preview => {
-      if (isEqual(preview.participants, payload.participants))
-        preview.favoriteList = payload.favoriteList;
+      if (isEqual(preview.participants, payload.chat.participants))
+        preview.favoriteList = payload.chat.favoriteList;
     });
-    state.chatData = payload;
+    state.chatData = payload.chat;
     state.messagesPreview = messagesPreview;
   },
   rejectedReducer: (state, { payload }) => {
@@ -138,23 +143,24 @@ const changeChatFavoriteExtraReducers = createExtraReducers({
 });
 
 //---------- changeChatBlock
-export const changeChatBlock = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/changeChatBlock`,
+
+export const changeChatBlockSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/changeChatBlockSql`,
   thunk: async payload => {
-    const { data } = await restController.changeChatBlock(payload);
+    const { data } = await restController.changeChatBlockSql(payload);
     return data;
   },
 });
 
-const changeChatBlockExtraReducers = createExtraReducers({
-  thunk: changeChatBlock,
+const changeChatBlockExtraReducersSql = createExtraReducers({
+  thunk: changeChatBlockSql,
   fulfilledReducer: (state, { payload }) => {
     const { messagesPreview } = state;
     messagesPreview.forEach(preview => {
-      if (isEqual(preview.participants, payload.participants))
-        preview.blackList = payload.blackList;
+      if (isEqual(preview.participants, payload.chat.participants))
+        preview.blackList = payload.chat.blackList;
     });
-    state.chatData = payload;
+    state.chatData = payload.chat;
     state.messagesPreview = messagesPreview;
   },
   rejectedReducer: (state, { payload }) => {
@@ -163,39 +169,41 @@ const changeChatBlockExtraReducers = createExtraReducers({
 });
 
 //---------- getCatalogList
-export const getCatalogList = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/getCatalogList`,
+
+export const getCatalogListSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/getCatalogListSql`,
   thunk: async payload => {
-    const { data } = await restController.getCatalogList(payload);
+    const { data } = await restController.getCatalogListSql(payload);
     return data;
   },
 });
 
-const getCatalogListExtraReducers = createExtraReducers({
-  thunk: getCatalogList,
+const getCatalogListExtraReducersSql = createExtraReducers({
+  thunk: getCatalogListSql,
   fulfilledReducer: (state, { payload }) => {
     state.isFetching = false;
-    state.catalogList = [...payload];
+    state.catalogList = [...payload.catalogs];
   },
   rejectedReducer,
 });
 
 //---------- addChatToCatalog
-export const addChatToCatalog = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/addChatToCatalog`,
+
+export const addChatToCatalogSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/addChatToCatalogSql`,
   thunk: async payload => {
-    const { data } = await restController.addChatToCatalog(payload);
+    const { data } = await restController.addChatToCatalogSql(payload);
     return data;
   },
 });
 
-const addChatToCatalogExtraReducers = createExtraReducers({
-  thunk: addChatToCatalog,
+const addChatToCatalogExtraReducersSql = createExtraReducers({
+  thunk: addChatToCatalogSql,
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
-        catalogList[i].chats = payload.chats;
+      if (catalogList[i].id === payload.id) {
+        catalogList[i].conversations = payload.conversations;
         break;
       }
     }
@@ -209,18 +217,19 @@ const addChatToCatalogExtraReducers = createExtraReducers({
 });
 
 //---------- createCatalog
-export const createCatalog = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/createCatalog`,
+
+export const createCatalogSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/createCatalogSql`,
   thunk: async payload => {
-    const { data } = await restController.createCatalog(payload);
+    const { data } = await restController.createCatalogSql(payload);
     return data;
   },
 });
 
-const createCatalogExtraReducers = createExtraReducers({
-  thunk: createCatalog,
+const createCatalogExtraReducersSql = createExtraReducers({
+  thunk: createCatalogSql,
   fulfilledReducer: (state, { payload }) => {
-    state.catalogList = [...state.catalogList, payload];
+    state.catalogList = [...state.catalogList, payload.catalog];
     state.isShowCatalogCreation = false;
   },
   rejectedReducer: (state, { payload }) => {
@@ -230,21 +239,22 @@ const createCatalogExtraReducers = createExtraReducers({
 });
 
 //---------- deleteCatalog
-export const deleteCatalog = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/deleteCatalog`,
+
+export const deleteCatalogSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/deleteCatalogSql`,
   thunk: async payload => {
-    await restController.deleteCatalog(payload);
+    await restController.deleteCatalogSql(payload);
     return payload;
   },
 });
 
-const deleteCatalogExtraReducers = createExtraReducers({
-  thunk: deleteCatalog,
+const deleteCatalogExtraReducersSql = createExtraReducers({
+  thunk: deleteCatalogSql,
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     const newCatalogList = remove(
       catalogList,
-      catalog => payload.catalogId !== catalog._id
+      catalog => payload.catalogId !== catalog.id
     );
     state.catalogList = [...newCatalogList];
   },
@@ -254,21 +264,22 @@ const deleteCatalogExtraReducers = createExtraReducers({
 });
 
 //---------- removeChatFromCatalog
-export const removeChatFromCatalog = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/removeChatFromCatalog`,
+
+export const removeChatFromCatalogSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/removeChatFromCatalogSql`,
   thunk: async payload => {
-    const { data } = await restController.removeChatFromCatalog(payload);
+    const { data } = await restController.removeChatFromCatalogSql(payload);
     return data;
   },
 });
 
-const removeChatFromCatalogExtraReducers = createExtraReducers({
-  thunk: removeChatFromCatalog,
+const removeChatFromCatalogExtraReducersSql = createExtraReducers({
+  thunk: removeChatFromCatalogSql,
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
-        catalogList[i].chats = payload.chats;
+      if (catalogList[i].id === payload.id) {
+        catalogList[i].conversations = payload.conversations;
         break;
       }
     }
@@ -281,20 +292,21 @@ const removeChatFromCatalogExtraReducers = createExtraReducers({
 });
 
 //---------- changeCatalogName
-export const changeCatalogName = decorateAsyncThunk({
-  key: `${CHAT_SLICE_NAME}/changeCatalogName`,
+
+export const changeCatalogNameSql = decorateAsyncThunk({
+  key: `${CHAT_SLICE_NAME}/changeCatalogNameSql`,
   thunk: async payload => {
-    const { data } = await restController.changeCatalogName(payload);
+    const { data } = await restController.changeCatalogNameSql(payload);
     return data;
   },
 });
 
-const changeCatalogNameExtraReducers = createExtraReducers({
-  thunk: changeCatalogName,
+const changeCatalogNameExtraReducersSql = createExtraReducers({
+  thunk: changeCatalogNameSql,
   fulfilledReducer: (state, { payload }) => {
     const { catalogList } = state;
     for (let i = 0; i < catalogList.length; i++) {
-      if (catalogList[i]._id === payload._id) {
+      if (catalogList[i].id === payload.id) {
         catalogList[i].catalogName = payload.catalogName;
         break;
       }
@@ -307,6 +319,7 @@ const changeCatalogNameExtraReducers = createExtraReducers({
     state.isRenameCatalog = false;
   },
 });
+
 //-------------------------------------------------------
 
 const reducers = {
@@ -321,14 +334,14 @@ const reducers = {
   },
 
   addMessage: (state, { payload }) => {
-    const { message, preview } = payload;
+    const { newMessage, preview } = payload;
     const { messagesPreview } = state;
     let isNew = true;
     messagesPreview.forEach(preview => {
-      if (isEqual(preview.participants, message.participants)) {
-        preview.text = message.body;
-        preview.sender = message.sender;
-        preview.createAt = message.createdAt;
+      if (isEqual(preview.participants, newMessage.participants)) {
+        preview.text = newMessage.body;
+        preview.sender = newMessage.sender;
+        preview.createAt = newMessage.createdAt;
         isNew = false;
       }
     });
@@ -336,7 +349,7 @@ const reducers = {
       messagesPreview.push(preview);
     }
     state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message];
+    state.messages = [...state.messages, payload.newMessage];
   },
 
   backToDialogList: state => {
@@ -389,17 +402,17 @@ const reducers = {
 };
 
 const extraReducers = builder => {
-  getPreviewChatExtraReducers(builder);
-  getDialogMessagesExtraReducers(builder);
-  sendMessageExtraReducers(builder);
-  changeChatFavoriteExtraReducers(builder);
-  changeChatBlockExtraReducers(builder);
-  getCatalogListExtraReducers(builder);
-  addChatToCatalogExtraReducers(builder);
-  createCatalogExtraReducers(builder);
-  deleteCatalogExtraReducers(builder);
-  removeChatFromCatalogExtraReducers(builder);
-  changeCatalogNameExtraReducers(builder);
+  sendSqlMessageExtraReducers(builder);
+  getDialogMessagesSqlExtraReducers(builder);
+  getPreviewChatSqlExtraReducers(builder);
+  changeChatBlockExtraReducersSql(builder);
+  changeChatFavoriteExtraReducersSql(builder);
+  createCatalogExtraReducersSql(builder);
+  getCatalogListExtraReducersSql(builder); 
+  addChatToCatalogExtraReducersSql(builder); 
+  deleteCatalogExtraReducersSql(builder); 
+  removeChatFromCatalogExtraReducersSql(builder); 
+  changeCatalogNameExtraReducersSql(builder);
 };
 
 const chatSlice = createSlice({

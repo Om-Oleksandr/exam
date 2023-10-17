@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Catalog extends Model {
     /**
@@ -9,32 +7,32 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate (models) {
+      Catalog.belongsTo(models.Users, {
+        foreignKey: 'userId',
+        targetKey: 'id',
+      });
     }
   }
-  Catalog.init({
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER
+  Catalog.init(
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      catalogName: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      conversations: {
+        type: DataTypes.ARRAY(DataTypes.INTEGER),
+        allowNull: false,
+      },
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    catalogName: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    conversations: {
-      type: DataTypes.ARRAY(DataTypes.INTEGER),
-      allowNull: false,
-    },
-  }, {
-    sequelize,
-    modelName: 'Catalog',
-  });
+    {
+      sequelize,
+      modelName: 'Catalog',
+    }
+  );
   return Catalog;
 };

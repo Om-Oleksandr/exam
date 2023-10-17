@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getPreviewChat } from '../../../../store/slices/chatSlice';
+import { getPreviewChatSql } from '../../../../store/slices/chatSlice';
 import DialogList from '../DialogList/DialogList';
 
 class DialogListContainer extends React.Component {
   componentDidMount() {
-    // this.props.getChatPreview();
+    this.props.getChatPreview();
   }
 
   render() {
@@ -17,7 +17,7 @@ class DialogListContainer extends React.Component {
 const mapStateToProps = (state) => state.chatStore;
 
 const mapDispatchToProps = (dispatch) => ({
-  getChatPreview: () => dispatch(getPreviewChat()),
+  getChatPreview: () => dispatch(getPreviewChatSql()),
 });
 
 export default connect(

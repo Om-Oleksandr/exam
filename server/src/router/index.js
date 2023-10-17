@@ -6,6 +6,7 @@ const contestController = require('../controllers/contestController');
 const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
 const chatController = require('../controllers/chatController');
+const sqlChatController = require('../controllers/sqlChatController');
 const upload = require('../utils/fileUpload');
 const router = express.Router();
 
@@ -113,69 +114,69 @@ router.post(
 );
 
 router.post(
-  '/newMessage',
+  '/new-message',
   checkToken.checkToken,
-  chatController.addMessage,
+  sqlChatController.addMessage,
 );
 
 router.post(
-  '/getChat',
+  '/get-chat',
   checkToken.checkToken,
-  chatController.getChat,
+  sqlChatController.getChat,
 );
 
 router.post(
-  '/getPreview',
+  '/get-preview',
   checkToken.checkToken,
-  chatController.getPreview,
+  sqlChatController.getPreview,
 );
 
 router.post(
-  '/blackList',
+  '/black-list',
   checkToken.checkToken,
-  chatController.blackList,
+  sqlChatController.blackList,
 );
 
 router.post(
-  '/favorite',
+  '/favorite-sql',
   checkToken.checkToken,
-  chatController.favoriteChat,
+  sqlChatController.favoriteChat,
 );
 
 router.post(
-  '/createCatalog',
+  '/create-catalog',
   checkToken.checkToken,
-  chatController.createCatalog,
+  sqlChatController.createCatalog,
 );
 
 router.post(
-  '/updateNameCatalog',
+  '/update-name-natalog',
   checkToken.checkToken,
-  chatController.updateNameCatalog,
+  sqlChatController.updateNameCatalog,
 );
 
 router.post(
-  '/addNewChatToCatalog',
+  '/add-new-chat-to-catalog',
   checkToken.checkToken,
-  chatController.addNewChatToCatalog,
+  sqlChatController.addNewChatToCatalog,
 );
 
 router.post(
-  '/removeChatFromCatalog',
+  '/remove-chat-from-catalog',
   checkToken.checkToken,
-  chatController.removeChatFromCatalog,
+  sqlChatController.removeChatFromCatalog,
 );
 
 router.post(
-  '/deleteCatalog',
+  '/delete-catalog',
   checkToken.checkToken,
-  chatController.deleteCatalog,
+  sqlChatController.deleteCatalog,
 );
 
 router.post(
-  '/getCatalogs',
+  '/get-catalogs',
   checkToken.checkToken,
-  chatController.getCatalogs,
+  sqlChatController.getCatalogs,
 );
 
 module.exports = router;

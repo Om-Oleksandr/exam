@@ -8,17 +8,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      // define association here
+      Conversation.hasMany(models.Message, {
+        foreignKey: { field: 'conversationId' },
+        targetKey: 'id',
+      });
     }
   }
   Conversation.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-      },
       participant1: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -40,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Chat',
+      modelName: 'Conversation',
     }
   );
   return Conversation;

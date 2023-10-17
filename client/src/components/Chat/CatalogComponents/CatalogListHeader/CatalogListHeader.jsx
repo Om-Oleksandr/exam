@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import {
   changeShowModeCatalog,
   changeRenameCatalogMode,
-  changeCatalogName,
+  changeCatalogNameSql,
 } from '../../../../store/slices/chatSlice';
 import styles from './CatalogHeader.module.sass';
 import FormInput from '../../../FormInput/FormInput';
@@ -12,8 +12,8 @@ import Schems from '../../../../utils/validators/validationSchems';
 
 const CatalogListHeader = (props) => {
   const changeCatalogName = (values) => {
-    const { changeCatalogName, _id } = props;
-    changeCatalogName({ catalogName: values.catalogName, catalogId: _id });
+    const { changeCatalogNameSql, id } = props;
+    changeCatalogNameSql({ catalogName: values.catalogName, catalogId: id });
   };
   const {
     catalogName,
@@ -66,9 +66,9 @@ const CatalogListHeader = (props) => {
 
 const mapStateToProps = (state) => {
   const { isRenameCatalog } = state.chatStore;
-  const { catalogName, _id } = state.chatStore.currentCatalog;
+  const { catalogName, id } = state.chatStore.currentCatalog;
   return {
-    _id,
+    id,
     catalogName,
     isRenameCatalog,
     initialValues: {
@@ -80,7 +80,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   changeShowModeCatalog: () => dispatch(changeShowModeCatalog()),
   changeRenameCatalogMode: () => dispatch(changeRenameCatalogMode()),
-  changeCatalogName: (data) => dispatch(changeCatalogName(data)),
+  changeCatalogNameSql: (data) => dispatch(changeCatalogNameSql(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CatalogListHeader);

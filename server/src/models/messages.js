@@ -8,17 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate (models) {
-      // define association here
+      Message.belongsTo(models.Conversation, {
+        foreignKey: { field: 'conversationId' },
+        targetKey: 'id',
+      });
+      Message.belongsTo(models.Users, {
+        foreignKey: 'sender',
+        targetKey: 'id',
+      });
     }
   }
   Message.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-      },
       sender: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -30,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       conversationId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Conversation',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
@@ -40,10 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
       },
     },
-    {
-      sequelize,
-      modelName: 'Message',
-    }
+    { sequelize, timestamps: true, modelName: 'Message' }
   );
   return Message;
 };
