@@ -1,0 +1,29 @@
+.container
+    max-width: 1280px
+    display: flex
+    justify-content: space-between
+    flex-wrap: wrap
+    row-gap: 0.9375rem
+    padding: 3rem 0.625rem
+    margin: 4rem auto 0
+    .item
+        flex: 0 0 30%
+        text-align: center
+        padding: 1rem
+        transition: all 0.3s ease
+        @media(max-width: 670px)
+            flex: 0 0 100%
+        button
+            background-color: #878787
+            color: #fff
+            padding: 0.4rem 0.9rem
+            border-radius: 1rem
+            border: none
+            transition: inherit
+        p
+            color: #878787
+            margin-top: 1rem
+        &.active
+            box-shadow: 0 0 3px 3px #166e58
+            button
+                background-color: #166e58

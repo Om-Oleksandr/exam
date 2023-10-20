@@ -1,23 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import cx from 'classnames';
 import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
-
+import { getEvents } from '../../store/slices/eventsSlice';
 class Header extends React.Component {
   componentDidMount () {
-    const { pathname } = this.props.history.location;
-    if (
-      !this.props.data &&
-      pathname !== '/login' &&
-      pathname !== '/registration'
-    ) {
+    if (!this.props.userStore.data) {
       this.props.getUser();
     }
+    const storedEvents = localStorage.getItem('events');
+    if (storedEvents) {
+      const parsedEvents = JSON.parse(storedEvents);
+      this.props.getEvents(parsedEvents);
+    }
   }
-
+  componentDidUpdate (prevProps) {
+    const {
+      events,
+      userStore: { data },
+    } = this.props;
+    if (data !== prevProps.data) {
+      localStorage.setItem('events', JSON.stringify(events));
+    }
+  }
   logOut = () => {
     localStorage.clear();
     this.props.clearUserStore();
@@ -29,19 +38,26 @@ class Header extends React.Component {
   };
 
   renderLoginButtons = () => {
-    if (this.props.data) {
+    const alerts = this.props.events.filter(
+      event => event.alert === true
+    ).length;
+    if (this.props.userStore.data) {
       return (
         <>
-          <div className={styles.userInfo}>
+          <div
+            className={cx(styles.userInfo, {
+              [styles.notifications]: alerts > 0,
+            })}
+          >
             <img
               src={
-                this.props.data.avatar === null
+                this.props.userStore.data.avatar === null
                   ? CONSTANTS.ANONYM_IMAGE_PATH
-                  : `${CONSTANTS.publicURL}${this.props.data.avatar}`
+                  : `${CONSTANTS.publicURL}${this.props.userStore.data.avatar}`
               }
               alt='user'
             />
-            <span>{`Hi, ${this.props.data.displayName}`}</span>
+            <span>{`Hi, ${this.props.userStore.data.displayName}`}</span>
             <img
               src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
               alt='menu'
@@ -71,6 +87,11 @@ class Header extends React.Component {
                   style={{ textDecoration: 'none' }}
                 >
                   <span>Affiliate Dashboard</span>
+                </Link>
+              </li>
+              <li data-notifications={alerts > 0 ? alerts : null}>
+                <Link to='/events' style={{ textDecoration: 'none' }}>
+                  <span>Events</span>
                 </Link>
               </li>
               <li>
@@ -271,15 +292,16 @@ class Header extends React.Component {
                 </li>
               </ul>
             </div>
-            {this.props.data &&
-              this.props.data.role !== CONSTANTS.ROLES.CREATOR && (
-                <div
-                  className={styles.startContestBtn}
-                  onClick={this.startContests}
-                >
-                  START CONTEST
-                </div>
-              )}
+            {this.props.userStore.data &&
+             
+              this.props.userStore.data.role !== CONSTANTS.ROLES.CREATOR && (
+                  <div
+                    className={styles.startContestBtn}
+                    onClick={this.startContests}
+                  >
+                    START CONTEST
+                  </div>
+                )}
           </div>
         </div>
       </div>
@@ -287,10 +309,17 @@ class Header extends React.Component {
   }
 }
 
-const mapStateToProps = state => state.userStore;
+const mapStateToProps = state => {
+  const {
+    userStore,
+    events: { events },
+  } = state;
+  return { userStore, events };
+};
 const mapDispatchToProps = dispatch => ({
   getUser: () => dispatch(getUser()),
   clearUserStore: () => dispatch(clearUserStore()),
+  getEvents: value => dispatch(getEvents(value)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

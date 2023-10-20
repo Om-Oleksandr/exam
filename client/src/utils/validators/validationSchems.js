@@ -213,6 +213,27 @@ const schemas = {
       )
       .required('required'),
   }),
+  EventSchema: yup.object({
+    name: yup
+      .string()
+      .trim()
+      .min(5, '5-55 characters')
+      .max(55, '5-55 characters')
+      .required('required'),
+    date: yup
+      .date()
+      .min(new Date(), 'min date is today')
+      .required('required'),
+    reminder: yup
+      .number()
+      .min(1, '1-7')
+      .max(7, '1-7')
+      .required('required'),
+    reminderType: yup
+      .string()
+      .oneOf(['days', 'hours'])
+      .required('selection required'),
+  }),
 };
 
 export default schemas;
