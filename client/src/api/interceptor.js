@@ -46,7 +46,8 @@ httpClient.interceptors.response.use(
       err.response.status === 401 &&
       window.location.pathname !== '/login' &&
       window.location.pathname !== '/' &&
-      window.location.pathname !== '/registration'
+      window.location.pathname !== '/registration' &&
+      window.location.pathname !== '/help'
     ) {
       history.push('/login');
       history.go('/login');
