@@ -1,0 +1,253 @@
+@use "/src/common/styles/templates" as *
+a,
+button
+    transition: all 0.3s ease-in-out
+h2
+    margin-bottom: 0.5rem
+    font:
+        size: 2rem
+        weight: 400
+    @media(max-width:420px)
+        font-size: 1.55rem
+button
+    font-family: Poppins-Regular, Helvetica, Arial,sans-serif
+.heroContainer
+    @extend %container
+    margin: 3.75rem auto 0
+    padding: 0 0.9375rem 2rem
+
+.servicesContainer
+    @extend %container
+    justify-content: center
+    padding: 2rem 0.9375rem
+    text-align: center
+    div.servicesHeader
+        margin-bottom: 4rem
+        span
+            @extend %notice
+
+.cardsList
+    margin: 0
+    @media(min-width: 768px)
+        display: flex
+
+.stepsContainer
+    @extend %container
+    justify-content: center
+    padding: 8rem 0.9375rem
+    h2
+        text-align: center
+
+    @media(min-width: 992px)
+        align-items: center
+    @media(max-width: 768px)
+        padding:
+            top: 4rem
+            bottom: 4rem
+.stepsHeader
+    margin-bottom: 4rem
+    div
+        @extend %imgWrapper
+
+.stepsInnerContainer
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    align-items: center
+.innerItem
+    flex: 0 0 50%
+    padding: 0 0.9375rem
+    @media(max-width: 991px)
+        flex: 0 0 100%
+    &:first-child
+        @media(max-width: 991px)
+            order: 2
+    &:last-child
+        margin-bottom: 3rem
+        @media(min-width: 993px)
+            margin-bottom: 0
+.tabsContainer
+    @extend %container
+    display: flex
+    padding: 4rem 0
+    flex-wrap: wrap
+
+.tabsNav
+    align-self: flex-start
+    flex: 0 0 25%
+    nav
+        background-color: #377dff
+        border-radius: 0.3125rem
+        ul
+            padding: 1rem 2rem
+            a
+                display: block
+                font-size: .875rem
+                padding: 1rem 0
+                color: rgba(255,255,255,.7)
+                line-height: 1.5
+                &:hover
+                    color: #fff
+    @media(max-width: 992px)
+        margin-bottom: 3rem
+
+.tabsList
+    flex: 0 0 75%
+    a
+        color: #377dff
+        &:hover
+            color: #0052ea
+
+.tabsNav,
+.tabsList
+    padding: 0 0.9375rem
+    @media(max-width: 992px)
+        flex: 0 0 100%
+
+.startContainer
+    width: 100%
+    background-image: linear-gradient(150deg,#2d1582 0%,#19a0ff 100%)
+    background-repeat: repeat-x
+    position: relative
+    .startHeader
+        @extend %container
+        display: block
+        text-align: center
+        padding: 2rem 0.9375rem
+        position: relative
+        z-index: 1
+        h3
+            color: #00dffc
+            margin-bottom: 0.5rem
+            font:
+                size: 2rem
+                weight: 600
+            @media(max-width: 420px)
+                font-size: 1.55rem
+        p
+            color: #fff
+            font-size: 1.25rem
+            margin-bottom: 1rem
+        a
+            @include btn(#fff, 0.3125rem, true,#000)
+            @media(max-width: 482px)
+                width: 100%
+.firstSvg,
+.secondSvg
+    width: 208px
+    position: absolute
+
+.firstSvg
+    top: 0
+    left: 0
+
+.secondSvg
+    bottom: 0
+    right: 0
+
+.statsContainer
+    max-width: 1280px
+    margin: auto
+    padding: 4rem 0.9375rem
+    & > div
+        @extend %container
+
+.questionsContainer
+    @extend %container
+    display: block
+    padding: 2rem 0.9375rem
+    .questionsWrapper
+        display: flex
+        flex-wrap: wrap
+        margin-bottom: 5rem 
+    .offer,
+    .consultation
+        padding: 4rem
+        flex: 0 0 100%
+        @media(max-width: 576px)
+            padding: 4rem 2rem
+    .offer
+        @media(min-width: 992px)
+            flex: 0 0 58.3%
+        ul li
+            display: flex
+            span
+                display: grid
+                place-items: center
+                width: 2rem
+                height: 2rem
+                background-color: rgba(55,125,255,.1)
+                border-radius: 50%
+                margin-right: 1rem
+            div
+                flex: 1
+                h4
+                    font-size: 1.25rem
+                    margin-bottom: 0.25rem
+                p
+                    font-size: 0.875rem
+                    a
+                        color: #377dff
+
+            &:first-child
+                margin-bottom: 1rem
+                padding-bottom: 1rem
+            &:last-child
+                margin-top: 1rem
+
+    .consultation
+        background-color: #377dff
+        @media(min-width: 992px)
+            flex: 0 0 41.6%
+        div > *
+            display: block
+            color: #fff
+        div
+            font-size: 0.875rem
+            padding-bottom: 1rem
+            margin-bottom: 1rem
+            h4
+                font-size: 2rem
+                line-height: 3rem
+                margin-bottom: 0.25rem
+            button
+                @include btn(#fff, 6.1875rem, false, #377dff)
+                font-size: 1rem
+            a
+                margin: 2.5rem 0 1.3rem
+                span
+                    margin-right: 0.9375rem
+.sponsorsContainer
+    @extend %container
+    display: block
+    padding: 0 0.9375rem
+    margin-bottom: 2rem
+    .sponsorsWrapper
+        display: flex
+        flex-wrap: wrap
+    .sponsorsHeader
+        flex: 0 0 33.3%
+        font-size: 1.75rem
+        line-height: 1.5rem
+        font-weight: 300
+    .sponsorsLogos
+        display: flex
+        flex-wrap: wrap
+        flex: 0 0 64.6%
+        justify-content: center
+    .sponsorsHeader,
+    .sponsorsLogos
+        padding: 2rem 0 0
+        @media(max-width: 768px)
+            flex: 0 0 100%
+    .sponsorLogo
+        padding: 0 0.9375rem
+        flex: 0 0 33.33%
+        max-width: 33.33%
+        margin: 0 0 1.5rem
+        img
+            max-width: 100%
+            object-fit: cover 
+        @media(min-width: 992px)
+            flex: 0 0 25%
+            margin: 0

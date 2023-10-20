@@ -1,0 +1,47 @@
+.item
+    padding: 1rem 0 1rem 2.5rem
+    position: relative
+    &:before,
+    &:after
+        content: ""
+        position: absolute
+        top: 0
+        bottom: 0
+        right: 0
+        margin: auto auto auto 0
+    &:before
+        left: -0.25rem
+        width: 2rem
+        height: 0.0625rem
+        border-top: 1px solid #d1d1d1
+    &:after
+        left: -0.3125rem
+        width: 0.0625rem
+        height: 100%
+        border-right: 1px solid #d1d1d1
+    &:first-child:after
+        height: 50%
+        top: auto
+    &:last-child:after
+        height: 50%
+        bottom: auto
+    @media(max-width: 400px)
+        padding-left: 1.5rem
+        &:before
+            width: 1.5rem
+.wrapper
+    display: flex
+    align-items: center
+    padding: 2rem
+    @media(max-width: 400px)
+        padding: 2rem 0
+.indicator
+    min-width: 3rem
+    margin-right: 1rem
+    span
+        color: #377dff
+        font-size: 3.5rem
+        line-height: 1.2
+.content
+    p
+        margin: 0

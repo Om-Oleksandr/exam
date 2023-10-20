@@ -1,0 +1,17 @@
+@use "/src/common/styles/templates" as *
+
+.card
+    flex: 0 0 33.33333%
+    padding: 0 0.9375rem
+    @media(max-width: 768px)
+        margin-bottom: 3rem
+        flex: 0 0 100%
+        &:last-child
+            margin: 0
+    .cardWrapper
+        padding: 0 3rem
+        text-align: center
+        @media(max-width: 768px)
+            padding: 0 1rem
+        .cardImage
+            @extend %imgWrapper

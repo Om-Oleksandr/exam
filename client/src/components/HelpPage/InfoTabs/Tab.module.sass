@@ -1,0 +1,38 @@
+.item
+    color: #1e2022
+    padding-bottom: 4rem
+    h3
+        color: #377dff
+        margin-bottom: 0.5rem
+        font:
+            size: 1.75rem
+            weight: 600
+        line-height: 1.5
+
+.card
+    margin-bottom: 1rem
+    border: 1px solid #e7eaf3
+    .cardController
+        border-bottom: 1px solid #e7eaf3
+        button
+            width: 100%
+            display: flex
+            justify-content: space-between
+            align-items: center
+            background-color: transparent
+            padding: 1rem
+            border: none
+            text-align: start
+            &:hover
+                color: #0052ea
+            span
+                transition: all 0.35s ease
+            &.open
+                span
+                    transform: rotate(90deg)
+    .cardContent
+        overflow: hidden
+        transition: height 0.35s ease
+        .contentBody
+            padding: 1rem
+            line-height: 1.5rem

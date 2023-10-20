@@ -70,12 +70,20 @@
             justify-content: flex-start
             margin-right: 30px
             position: relative
+            span,
+            a
+              color: #495d8b
+              font-size: 15px
+              font-weight: 300
+              padding: 15px 0
+            a
+              text-decoration: none
             @media(max-width: 700px)
               width: 100%
               padding: 0 15px
-
             &:hover
-              span
+              span,
+              a
                 color: #f27e51
 
               ul
@@ -118,12 +126,6 @@
 
                   &:hover
                     color: #f27e51
-
-            span
-              color: #495d8b
-              font-size: 15px
-              font-weight: 300
-              padding: 15px 0
 
   .loginSignnUpHeaders
     margin-top: 30px
