@@ -18,6 +18,7 @@ module.exports.checkAuth = async (req, res, next) => {
       foundUser.password = undefined;
       return res.status(200).send({ data: foundUser });
     }
+    res.sendStatus(401)
     next(createHTTPError(401, 'Need token'));
   } catch (err) {
     next(new TokenError());

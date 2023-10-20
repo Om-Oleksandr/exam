@@ -3,6 +3,7 @@ const {
   verifyAccessToken,
   verifyRefreshToken,
 } = require('../services/tokenService');
+const TokenError = require('../errors/TokenError');
 
 module.exports.checkAccessToken = async (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ module.exports.checkAccessToken = async (req, res, next) => {
     }
     next(createHTTPErrors(401, 'Need token'));
   } catch (error) {
-    next(error);
+    next(new TokenError());
   }
 };
 

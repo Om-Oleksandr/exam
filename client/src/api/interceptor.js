@@ -6,12 +6,10 @@ const httpClient = axios.create({
   baseURL: CONSTANTS.BASE_URL,
 });
 
-let accessToken = null;
-
 httpClient.interceptors.request.use(
   config => {
-    const refreshToken = window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
-    if (accessToken && refreshToken) {
+    const accessToken = window.localStorage.getItem(CONSTANTS.ACCESS_TOKEN);
+    if (accessToken) {
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${accessToken}`,
@@ -38,33 +36,40 @@ httpClient.interceptors.response.use(
         },
       } = response;
       window.localStorage.setItem(CONSTANTS.REFRESH_TOKEN, refresh);
-      accessToken = access;
+      window.localStorage.setItem(CONSTANTS.ACCESS_TOKEN, access);
     }
     return response;
   },
-  err => {
+  async err => {
+    console.log(err.response);
     if (
       err.response.status === 401 &&
       window.location.pathname !== '/login' &&
-      window.location.pathname !== '/'
+      window.location.pathname !== '/' &&
+      window.location.pathname !== '/registration'
     ) {
-      history.replace('/login');
+      history.push('/login');
+      history.go('/login');
       return;
     }
 
     const refreshToken = window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
     if (err.response.status === 408 && refreshToken) {
+      console.log(refreshToken);
+      console.log(err.config);
       const {
         data: {
           data: {
             tokenPair: { access, refresh },
           },
         },
-      } = httpClient.post('auth/refresh', { refreshToken });
+      } = await httpClient.post('auth/refresh', { refreshToken });
+      console.log(access, refresh);
       window.localStorage.setItem(CONSTANTS.REFRESH_TOKEN, refresh);
-      accessToken = access;
-      err.config.headers['Authorization'] = 'Bearer ' + accessToken;
-      return axios.request(err.config);
+      window.localStorage.setItem(CONSTANTS.ACCESS_TOKEN, access);
+      err.config.headers['Authorization'] = 'Bearer ' + access;
+      console.log(err.config);
+      return httpClient(err.config);
     }
     return Promise.reject(err);
   }

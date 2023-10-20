@@ -8,7 +8,12 @@ import { getUser } from '../../store/slices/userSlice';
 
 class Header extends React.Component {
   componentDidMount () {
-    if (!this.props.data) {
+    const { pathname } = this.props.history.location;
+    if (
+      !this.props.data &&
+      pathname !== '/login' &&
+      pathname !== '/registration'
+    ) {
       this.props.getUser();
     }
   }
@@ -263,14 +268,15 @@ class Header extends React.Component {
                 </li>
               </ul>
             </div>
-            {this.props.data && this.props.data.role !== CONSTANTS.ROLES.CREATOR && (
-              <div
-                className={styles.startContestBtn}
-                onClick={this.startContests}
-              >
-                START CONTEST
-              </div>
-            )}
+            {this.props.data &&
+              this.props.data.role !== CONSTANTS.ROLES.CREATOR && (
+                <div
+                  className={styles.startContestBtn}
+                  onClick={this.startContests}
+                >
+                  START CONTEST
+                </div>
+              )}
           </div>
         </div>
       </div>

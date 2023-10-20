@@ -88,9 +88,10 @@ class CreatorDashboard extends React.Component {
     );
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentDidUpdate(nextProps, nextContext) {
     if (nextProps.location.search !== this.props.location.search) {
       this.parseUrlForParams(nextProps.location.search);
+      this.getContests(this.props.creatorFilter);
     }
   }
 

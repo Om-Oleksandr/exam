@@ -7,6 +7,8 @@ module.exports = {
   },
   MAX_DEVICES_AMOUNT: 5,
   SALT_ROUNDS: 5,
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken',
   SQUADHELP_BANK_NUMBER: '4564654564564564',
   SQUADHELP_BANK_NAME: 'SquadHelp',
   SQUADHELP_BANK_CVC: '453',
