@@ -10,7 +10,6 @@ const RadioGroup = props => {
   return (
     <Field>
       {({ field, form, meta }) => {
-        console.log(meta);
         return (
           <div
             className={cx(radio, { [inputError]: meta.error.hasOwnProperty('reminderType') && meta.touched })}
@@ -20,6 +19,7 @@ const RadioGroup = props => {
               type='radio'
               value='days'
               id='days'
+              checked={field.value.reminderType === 'days'}
               inputError={inputError}
             />
             <CustomField
@@ -27,6 +27,7 @@ const RadioGroup = props => {
               type='radio'
               value='hours'
               id='hours'
+              checked={field.value.reminderType === 'hours'}
               inputError={inputError}
             />
           </div>

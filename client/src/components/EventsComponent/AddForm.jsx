@@ -15,7 +15,7 @@ const AddForm = props => {
           name: '',
           date: '',
           reminder: '',
-          reminderType: '',
+          reminderType: 'days',
         }}
         validationSchema={Schems.EventSchema}
         onSubmit={onSubmit}

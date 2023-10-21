@@ -4,12 +4,10 @@ import MyDatePicker from './Date';
 import cx from 'classnames';
 
 const CustomField = props => {
-  const { name, inputError, id } = props;
-
+  const { name, inputError, id, checked } = props;
   return (
     <Field name={name}>
       {({ field, form, meta }) => {
-        // console.log(field, form, meta);
         return (
           <>
             {name !== 'date' ? (
@@ -26,7 +24,7 @@ const CustomField = props => {
                   </>
                 ) : (
                   <label htmlFor={id}>
-                    <input type='radio' id={id} {...field} value={id} />
+                    <input type='radio' id={id} {...field} value={id} checked={checked}/>
                     <span></span>
                     {id}
                   </label>
@@ -38,9 +36,6 @@ const CustomField = props => {
                   name={name}
                   className={cx({ [inputError]: meta.error && meta.touched })}
                 />
-                {/* {meta.touched && meta.error && (
-                <p className='error'>{meta.error}</p>
-              )} */}
               </>
             )}
           </>
