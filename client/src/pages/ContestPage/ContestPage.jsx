@@ -138,12 +138,11 @@ const ContestPage = props => {
 
   return (
     <div>
-      {/* <Chat/> */}
       {isShowOnFull && (
         <LightBox
           mainSrc={`${CONSTANTS.publicURL}${imagePath}`}
           onCloseRequest={() =>
-            changeShowImage({ isShowOnFull: false, imagePath: null })
+            dispatch(changeShowImage({ isShowOnFull: false, imagePath: null }))
           }
         />
       )}

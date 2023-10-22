@@ -24,7 +24,7 @@ const Steps = props => {
         <div className={innerItem}>
           <img
             src={`${constants.STATIC_IMAGES_PATH}helpPageImgs/steps.svg`}
-            alt='picture'
+            alt='guy'
           />
         </div>
         <div className={innerItem}>

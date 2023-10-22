@@ -1,6 +1,5 @@
 const http = require('http');
-const fs = require('fs');
-const path = require('path');
+// const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 require('./dbMongo/mongoose');
@@ -9,7 +8,7 @@ const controller = require('./socketInit');
 const handlerError = require('./handlerError/handler');
 const errorLogger = require('./errorLogs/logger');
 const { transformAndCopyFile } = require('./errorLogs/copyLogs');
-
+// dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(cors());
@@ -23,11 +22,14 @@ const server = http.createServer(app);
 server.listen(PORT, () =>
   console.log(`Example app listening on port ${PORT}!`)
 );
+
+console.log(process.env.ACCESS_SECRET);
+
 controller.createConnection(server);
 
 const currentDate = new Date();
 const dailyExecutionTime = '12:00:00';
-const intervalMilliseconds = 24 * 60 * 60 * 1000; // 24 години
+const intervalMilliseconds = 24 * 60 * 60 * 1000;
 const timeUntilNextExecution =
   new Date(
     `${currentDate.toDateString()} ${dailyExecutionTime} GMT+03:00`

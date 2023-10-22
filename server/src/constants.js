@@ -1,22 +1,10 @@
 module.exports = {
-  TOKENS: {
-    ACCESS_SECRET: 'asdasdasd4as5d4as8d7a8sd4as65d4a8sd7asd4as56d4',
-    ACCESS_TIME: '3m',
-    REFRESH_SECRET: 'klWOjhsadgih7H87ypaohj989PY2JpkojsgioLKskmqps',
-    REFRESH_TIME: '15d',
-  },
-  MAX_DEVICES_AMOUNT: 5,
-  SALT_ROUNDS: 5,
   ACCESS_TOKEN: 'accessToken',
   REFRESH_TOKEN: 'refreshToken',
-  SQUADHELP_BANK_NUMBER: '4564654564564564',
-  SQUADHELP_BANK_NAME: 'SquadHelp',
-  SQUADHELP_BANK_CVC: '453',
-  SQUADHELP_BANK_EXPIRY: '11/25',
-  ROLES:{
-  CUSTOMER: 'customer',
-  CREATOR: 'creator',
-  MODERATOR: 'moderator',
+  ROLES: {
+    CUSTOMER: 'customer',
+    CREATOR: 'creator',
+    MODERATOR: 'moderator',
   },
   CREATOR_ENTRIES: 'creator_entries',
   CONTEST_STATUSES: {
@@ -48,6 +36,6 @@ module.exports = {
   APPROVE_STATUSES: {
     APPROVED: 'approved',
     REJECTED: 'rejected',
-    PENDING: 'pending'
-  }
+    PENDING: 'pending',
+  },
 };

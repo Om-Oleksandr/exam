@@ -63,6 +63,7 @@ module.exports.changeMark = async (req, res, next) => {
 };
 
 module.exports.payment = async (req, res, next) => {
+  console.log(process.env.SQUADHELP_BANK_NUMBER);
   let transaction;
   try {
     transaction = await db.sequelize.transaction();
@@ -75,16 +76,16 @@ module.exports.payment = async (req, res, next) => {
               ''
             )}' AND "cvc"='${req.body.cvc}' AND "expiry"='${req.body.expiry}'
                 THEN "balance"-${req.body.price}
-            WHEN "cardNumber"='${CONSTANTS.SQUADHELP_BANK_NUMBER}' AND "cvc"='${
-          CONSTANTS.SQUADHELP_BANK_CVC
-        }' AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}'
+            WHEN "cardNumber"='${process.env.SQUADHELP_BANK_NUMBER}' AND "cvc"='${
+          process.env.SQUADHELP_BANK_CVC
+        }' AND "expiry"='${process.env.SQUADHELP_BANK_EXPIRY}'
                 THEN "balance"+${req.body.price} END
         `),
       },
       {
         cardNumber: {
           [db.Sequelize.Op.in]: [
-            CONSTANTS.SQUADHELP_BANK_NUMBER,
+            process.env.SQUADHELP_BANK_NUMBER,
             req.body.number.replace(/ /g, ''),
           ],
         },
@@ -159,10 +160,10 @@ module.exports.cashout = async (req, res, next) => {
         }'
                     THEN "balance"+${req.body.sum}
                 WHEN "cardNumber"='${
-                  CONSTANTS.SQUADHELP_BANK_NUMBER
+                  process.env.SQUADHELP_BANK_NUMBER
                 }' AND "expiry"='${
-          CONSTANTS.SQUADHELP_BANK_EXPIRY
-        }' AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}'
+          process.env.SQUADHELP_BANK_EXPIRY
+        }' AND "cvc"='${process.env.SQUADHELP_BANK_CVC}'
                     THEN "balance"-${req.body.sum}
                  END
                 `),
@@ -170,7 +171,7 @@ module.exports.cashout = async (req, res, next) => {
       {
         cardNumber: {
           [db.Sequelize.Op.in]: [
-            CONSTANTS.SQUADHELP_BANK_NUMBER,
+            process.env.SQUADHELP_BANK_NUMBER,
             req.body.number.replace(/ /g, ''),
           ],
         },

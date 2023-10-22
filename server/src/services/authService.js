@@ -1,10 +1,9 @@
 const JWTService = require('./tokenService');
-const { MAX_DEVICES_AMOUNT } = require('../constants');
 
 module.exports.createSession = async user => {
   try {
     const tokenPair = await JWTService.createTokenPair(user);
-    if ((await user.countRefreshTokens()) >= MAX_DEVICES_AMOUNT) {
+    if ((await user.countRefreshTokens()) >= Number(process.env.MAX_DEVICES_AMOUNT)) {
       const [oldestToken] = await user.getRefreshTokens({
         order: [['updatedAt', 'ASC']],
       });
