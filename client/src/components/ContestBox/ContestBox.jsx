@@ -23,11 +23,14 @@ const ContestBox = props => {
   const ucFirstLetter = string =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const { id, title, contestType, prize, count } = props.data;
+  const {
+    data: { id, title, contestType, prize, validOffers },
+    goToExtended,
+  } = props;
   return (
     <div
       className={styles.contestBoxContainer}
-      onClick={() => props.goToExtended(id)}
+      onClick={() => goToExtended(id)}
     >
       <div className={styles.mainContestInfo}>
         <div className={styles.titleAndIdContainer}>
@@ -71,7 +74,7 @@ const ContestBox = props => {
               src={`${CONSTANTS.STATIC_IMAGES_PATH}entrieImage.png`}
               alt='logo'
             />
-            <span>{count}</span>
+            <span>{validOffers}</span>
           </div>
           <span>Entries</span>
         </div>

@@ -7,10 +7,10 @@ const CONSTANTS = require('../constants');
 module.exports.parseBody = (req, res, next) => {
   req.body.contests = JSON.parse(req.body.contests);
   for (let i = 0; i < req.body.contests.length; i++) {
-    if (req.body.contests[ i ].haveFile) {
+    if (req.body.contests[i].haveFile) {
       const file = req.files.splice(0, 1);
-      req.body.contests[ i ].fileName = file[ 0 ].filename;
-      req.body.contests[ i ].originalFileName = file[ 0 ].originalname;
+      req.body.contests[i].fileName = file[0].filename;
+      req.body.contests[i].originalFileName = file[0].originalname;
     }
   }
   next();
@@ -35,6 +35,10 @@ module.exports.canGetContest = async (req, res, next) => {
           },
         },
       });
+    } else if (req.tokenData.role === CONSTANTS.ROLES.MODERATOR) {
+      result = await db.Contest.findOne({
+        where: { id: req.headers.contestid },
+      });
     }
     result ? next() : next(new RightsError());
   } catch (e) {
@@ -48,7 +52,6 @@ module.exports.onlyForCreative = (req, res, next) => {
   } else {
     next();
   }
-
 };
 
 module.exports.onlyForCustomer = (req, res, next) => {
@@ -79,7 +82,6 @@ module.exports.canSendOffer = async (req, res, next) => {
   } catch (e) {
     next(new ServerError());
   }
-
 };
 
 module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
@@ -117,4 +119,3 @@ module.exports.canUpdateContest = async (req, res, next) => {
     next(new ServerError());
   }
 };
-

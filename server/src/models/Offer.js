@@ -1,6 +1,10 @@
 'use strict';
 const { Model } = require('sequelize');
-const { OFFER_STATUSES } = require('../constants');
+const CONSTANTS = require('../constants');
+const {
+  APPROVE_STATUSES,
+  OFFER_STATUSES
+} = CONSTANTS;
 module.exports = (sequelize, DataTypes) => {
   class Offer extends Model {
     static associate (models) {
@@ -30,16 +34,25 @@ module.exports = (sequelize, DataTypes) => {
       },
       text: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       fileName: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       originalFileName: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
-      status: {
+      buyerDecision: {
         type: DataTypes.ENUM(...Object.values(OFFER_STATUSES)),
+        allowNull: true,
         defaultValue: OFFER_STATUSES.PENDING,
+      },
+      approvedStatus: {
+        type: DataTypes.ENUM(...Object.values(APPROVE_STATUSES)),
+        allowNull: false,
+        defaultValue: APPROVE_STATUSES.PENDING,
       },
     },
     {

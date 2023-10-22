@@ -5,6 +5,7 @@ const CONSTANTS = {
   ROLES: {
     CUSTOMER: 'customer',
     CREATOR: 'creator',
+    MODERATOR: 'moderator',
   },
   CONTEST_STATUSES: {
     ACTIVE: 'active',
@@ -90,6 +91,11 @@ const CONSTANTS = {
       items: ['Terms of Service', 'Privacy Policy', 'Cookie Policy'],
     },
   ],
+  APPROVE_STATUSES: {
+    APPROVED: 'approved',
+    REJECTED: 'rejected',
+    PENDING: 'pending'
+  }
 };
 
 export default CONSTANTS;

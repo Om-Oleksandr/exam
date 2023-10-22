@@ -5,6 +5,7 @@ import {
   decorateAsyncThunk,
   rejectedReducer,
   createExtraReducers,
+  pendingReducer,
 } from '../../utils/store';
 
 const CONTEST_BY_ID_SLICE_NAME = 'getContestById';
@@ -34,6 +35,15 @@ export const getContestById = decorateAsyncThunk({
     return { contestData: data, offers: Offers };
   },
 });
+
+// export const getContestOffers = decorateAsyncThunk({
+//   key: `${CONTEST_BY_ID_SLICE_NAME}/getContestOffers`,
+//   thunk: async payload => {
+//     const { data } = await restController.getContestById(payload);
+//     delete data.Offers;
+//     return { contestData: data};
+//   },
+// })
 
 const getContestByIdExtraReducers = createExtraReducers({
   thunk: getContestById,
@@ -85,13 +95,13 @@ const setOfferStatusExtraReducers = createExtraReducers({
   thunk: setOfferStatus,
   fulfilledReducer: (state, { payload }) => {
     state.offers.forEach(offer => {
-      if (payload.status === CONSTANTS.OFFER_STATUSES.WON) {
-        offer.status =
+      if (payload.buyerDecision === CONSTANTS.OFFER_STATUSES.WON) {
+        offer.buyerDecision =
           payload.id === offer.id
             ? CONSTANTS.OFFER_STATUSES.WON
             : CONSTANTS.OFFER_STATUSES.REJECTED;
       } else if (payload.id === offer.id) {
-        offer.status = CONSTANTS.OFFER_STATUSES.REJECTED;
+        offer.buyerDecision = CONSTANTS.OFFER_STATUSES.REJECTED;
       }
     });
     state.error = null;
@@ -128,6 +138,14 @@ const changeMarkExtraReducers = createExtraReducers({
   },
 });
 
+export const setModeratorDecision = decorateAsyncThunk({
+  key: `${CONTEST_BY_ID_SLICE_NAME}/setModeratorDecision`,
+  thunk: async (status) => {
+    const { data } = await restController.setModeratorDecision(status);
+    return data;
+  },
+});
+
 //-----------------------------------------------------
 
 const reducers = {
@@ -156,6 +174,9 @@ const reducers = {
     state.isShowOnFull = isShowOnFull;
     state.imagePath = imagePath;
   },
+  changeValidOffers: (state, {payload})=>{
+    state.contestData.validOffers = payload - 1;
+  }
 };
 
 const extraReducers = builder => {
@@ -163,6 +184,17 @@ const extraReducers = builder => {
   addOfferExtraReducers(builder);
   setOfferStatusExtraReducers(builder);
   changeMarkExtraReducers(builder);
+
+  builder.addCase(setModeratorDecision.pending, pendingReducer);
+  builder.addCase(setModeratorDecision.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
+    state.offers = [...payload.contestOffers];
+  });
+  builder.addCase(setModeratorDecision.rejected, (state, { payload }) => {
+    state.isFetching = false;
+    state.error = payload;
+    state.offers = [];
+  });
 };
 
 const contestByIdSlice = createSlice({
@@ -182,6 +214,7 @@ export const {
   clearSetOfferStatusError,
   clearChangeMarkError,
   changeShowImage,
+  changeValidOffers
 } = actions;
 
 export default reducer;

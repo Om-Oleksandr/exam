@@ -95,7 +95,7 @@ class CreatorDashboard extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.getDataForContest();
     if (
       this.parseUrlForParams(this.props.location.search) &&
@@ -104,7 +104,7 @@ class CreatorDashboard extends React.Component {
       this.getContests(this.props.creatorFilter);
   }
 
-  getContests = (filter) => {
+  getContests = filter => {
     this.props.getContests({
       limit: 8,
       offset: 0,
@@ -123,15 +123,15 @@ class CreatorDashboard extends React.Component {
     });
   };
 
-  parseParamsToUrl = (creatorFilter) => {
+  parseParamsToUrl = creatorFilter => {
     const obj = {};
-    Object.keys(creatorFilter).forEach((el) => {
+    Object.keys(creatorFilter).forEach(el => {
       if (creatorFilter[el]) obj[el] = creatorFilter[el];
     });
     this.props.history.push(`/Dashboard?${queryString.stringify(obj)}`);
   };
 
-  parseUrlForParams = (search) => {
+  parseUrlForParams = search => {
     const obj = queryString.parse(search);
     const filter = {
       typeIndex: obj.typeIndex || 1,
@@ -153,7 +153,7 @@ class CreatorDashboard extends React.Component {
   getPredicateOfRequest = () => {
     const obj = {};
     const { creatorFilter } = this.props;
-    Object.keys(creatorFilter).forEach((el) => {
+    Object.keys(creatorFilter).forEach(el => {
       if (creatorFilter[el]) {
         obj[el] = creatorFilter[el];
       }
@@ -162,7 +162,7 @@ class CreatorDashboard extends React.Component {
     return obj;
   };
 
-  loadMore = (startFrom) => {
+  loadMore = startFrom => {
     this.props.getContests({
       limit: 8,
       offset: startFrom,
@@ -171,21 +171,21 @@ class CreatorDashboard extends React.Component {
   };
 
   setContestList = () => {
-    const array = [];
     const { contests } = this.props;
-    for (let i = 0; i < contests.length; i++) {
-      array.push(
-        <ContestBox
-          data={contests[i]}
-          key={contests[i].id}
-          goToExtended={this.goToExtended}
-        />
-      );
-    }
-    return array;
+    const filteredContest = contests.filter(
+      contest => contest.status === CONSTANTS.CONTEST_STATUSES.ACTIVE
+    );
+    const contestsList = filteredContest.map(elem => (
+      <ContestBox
+        data={elem}
+        key={elem.id}
+        goToExtended={this.goToExtended}
+      />
+    ));
+    return contestsList;
   };
 
-  goToExtended = (contestId) => {
+  goToExtended = contestId => {
     this.props.history.push(`/contest/${contestId}`);
   };
 
@@ -198,7 +198,7 @@ class CreatorDashboard extends React.Component {
     });
   };
 
-  render() {
+  render () {
     const { error, haveMore, creatorFilter } = this.props;
     const { isFetching } = this.props.dataForContest;
     return (
@@ -226,14 +226,14 @@ class CreatorDashboard extends React.Component {
             <div className={styles.inputContainer}>
               <span>By contest ID</span>
               <input
-                type="text"
+                type='text'
                 onChange={({ target }) =>
                   this.changePredicate({
                     name: 'contestId',
                     value: target.value,
                   })
                 }
-                name="contestId"
+                name='contestId'
                 value={creatorFilter.contestId}
                 className={styles.input}
               />
@@ -256,8 +256,8 @@ class CreatorDashboard extends React.Component {
                 value={creatorFilter.awardSort}
                 className={styles.input}
               >
-                <option value="desc">Descending</option>
-                <option value="asc">Ascending</option>
+                <option value='desc'>Descending</option>
+                <option value='asc'>Ascending</option>
               </select>
             </div>
           </div>
@@ -281,7 +281,7 @@ class CreatorDashboard extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { contestsList, dataForContest } = state;
   return { ...contestsList, dataForContest };
 };
@@ -290,7 +290,7 @@ const mapDispatchToProps = (dispatch) => ({
   getContests: (data) =>
     dispatch(getContests({ requestData: data, role: CONSTANTS.ROLES.CREATOR })),
   clearContestsList: () => dispatch(clearContestsList()),
-  newFilter: (filter) => dispatch(setNewCreatorFilter(filter)),
+  newFilter: filter => dispatch(setNewCreatorFilter(filter)),
   getDataForContest: () => dispatch(getDataForContest()),
 });
 

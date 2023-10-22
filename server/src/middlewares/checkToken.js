@@ -11,7 +11,6 @@ module.exports.checkAuth = async (req, res, next) => {
       headers: { authorization },
     } = req;
     if (authorization) {
-      console.log('authorization', authorization);
       const [, accessToken] = authorization.split(' ');
       const tokenData = await verifyAccessToken(accessToken);
       const foundUser = await userQueries.findUser({ id: tokenData.userId });

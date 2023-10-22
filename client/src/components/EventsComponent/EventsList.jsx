@@ -9,8 +9,6 @@ const EventsList = props => {
   const sortEvents = newEvents.sort(
     (event1, event2) => event1.date - event2.date
   );
-  console.log(newEvents);
-  console.log(sortEvents);
   const mapEvents = (event, index) => <Event event={event} key={index} />;
 
   return (

@@ -17,7 +17,6 @@ if (fs.existsSync(logFilePath)) {
 }
 
 module.exports = (err, req, res, next) => {
-  console.log('err===>>>>', err.stack);
   const logMessage = {
     message: err.message,
     time: new Date().getTime(),

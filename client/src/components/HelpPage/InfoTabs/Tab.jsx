@@ -74,7 +74,6 @@ const Tab = props => {
   useEffect(() => {
     if (linkAnchor !== null) {
       const tabItem = document.getElementById(linkAnchor);
-      console.log(tabItem.offsetTop);
       window.scrollTo({
         top: tabItem.offsetTop - 30,
         behavior: 'smooth',

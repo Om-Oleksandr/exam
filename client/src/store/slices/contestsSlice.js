@@ -18,6 +18,7 @@ const initialState = {
     ownEntries: false,
   },
   haveMore: true,
+  totalContests: null
 };
 
 export const getContests = decorateAsyncThunk({
@@ -27,6 +28,14 @@ export const getContests = decorateAsyncThunk({
       role === CONSTANTS.ROLES.CUSTOMER
         ? await restController.getCustomersContests(requestData)
         : await restController.getActiveContests(requestData);
+    return data;
+  },
+});
+
+export const getModeratorContests = decorateAsyncThunk({
+  key: `${CONTESTS_SLICE_NAME}/getModeratorContests`,
+  thunk: async (params) => {
+    const { data } = await restController.getModeratorContests(params);
     return data;
   },
 });
@@ -60,6 +69,18 @@ const extraReducers = builder => {
     state.error = payload;
     state.contests = [];
   });
+
+  builder.addCase(getModeratorContests.pending, pendingReducer);
+  builder.addCase(getModeratorContests.fulfilled, (state, { payload }) => {
+    state.isFetching = false;
+    state.contests = [...payload.data.contests];
+    state.totalContests = payload.data.totalContests
+  });
+  builder.addCase(getModeratorContests.rejected, (state, { payload }) => {
+    state.isFetching = false;
+    state.error = payload;
+    state.contests = [];
+  });
 };
 
 const contestsSlice = createSlice({
@@ -71,10 +92,7 @@ const contestsSlice = createSlice({
 
 const { actions, reducer } = contestsSlice;
 
-export const {
-  clearContestsList,
-  setNewCustomerFilter,
-  setNewCreatorFilter,
-} = actions;
+export const { clearContestsList, setNewCustomerFilter, setNewCreatorFilter } =
+  actions;
 
 export default reducer;

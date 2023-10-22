@@ -41,7 +41,6 @@ httpClient.interceptors.response.use(
     return response;
   },
   async err => {
-    console.log(err.response);
     if (
       err.response.status === 401 &&
       window.location.pathname !== '/login' &&
@@ -56,8 +55,6 @@ httpClient.interceptors.response.use(
 
     const refreshToken = window.localStorage.getItem(CONSTANTS.REFRESH_TOKEN);
     if (err.response.status === 408 && refreshToken) {
-      console.log(refreshToken);
-      console.log(err.config);
       const {
         data: {
           data: {
@@ -65,11 +62,9 @@ httpClient.interceptors.response.use(
           },
         },
       } = await httpClient.post('auth/refresh', { refreshToken });
-      console.log(access, refresh);
       window.localStorage.setItem(CONSTANTS.REFRESH_TOKEN, refresh);
       window.localStorage.setItem(CONSTANTS.ACCESS_TOKEN, access);
       err.config.headers['Authorization'] = 'Bearer ' + access;
-      console.log(err.config);
       return httpClient(err.config);
     }
     return Promise.reject(err);

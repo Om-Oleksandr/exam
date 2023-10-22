@@ -10,7 +10,6 @@ import styles from './Events.module.sass'
 const Events = () => {
   const dispatch = useDispatch();
   const onSubmit = (values, formikBag) => {
-    console.log(values);
     values.date = values.date.getTime();
     values.reminder = Number(values.reminder)
     values.id = Date.now();

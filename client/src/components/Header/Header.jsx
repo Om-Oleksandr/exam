@@ -294,7 +294,7 @@ class Header extends React.Component {
             </div>
             {this.props.userStore.data &&
              
-              this.props.userStore.data.role !== CONSTANTS.ROLES.CREATOR && (
+              this.props.userStore.data.role === CONSTANTS.ROLES.CUSTOMER && (
                   <div
                     className={styles.startContestBtn}
                     onClick={this.startContests}

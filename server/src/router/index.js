@@ -29,8 +29,16 @@ router.post(
   userController.payment
 );
 
-router.post('/getCustomersContests', contestController.getCustomersContests);
+router.post(
+  '/getCustomersContests',
 
+  contestController.getCustomersContests
+);
+router.get(
+  '/get-moderator-contests',
+
+  contestController.getModeratorContests
+);
 router.get(
   '/getContestById',
   basicMiddlewares.canGetContest,
@@ -43,7 +51,11 @@ router.post(
   contestController.getContests
 );
 
-router.get('/downloadFile/:fileName', contestController.downloadFile);
+router.get(
+  '/downloadFile/:fileName',
+
+  contestController.downloadFile
+);
 
 router.post(
   '/updateContest',
@@ -65,12 +77,23 @@ router.post(
 );
 
 router.post(
+  '/set-moderator-decision',
+
+  contestController.setModeratorDecision
+);
+
+router.post(
   '/changeMark',
   basicMiddlewares.onlyForCustomer,
   userController.changeMark
 );
 
-router.post('/updateUser', upload.uploadAvatar, userController.updateUser);
+router.post(
+  '/updateUser',
+
+  upload.uploadAvatar,
+  userController.updateUser
+);
 
 router.post(
   '/cashout',
@@ -92,7 +115,11 @@ router.post('/createCatalog', chatController.createCatalog);
 
 router.post('/updateNameCatalog', chatController.updateNameCatalog);
 
-router.post('/addNewChatToCatalog', chatController.addNewChatToCatalog);
+router.post(
+  '/addNewChatToCatalog',
+
+  chatController.addNewChatToCatalog
+);
 
 router.post('/removeChatFromCatalog', chatController.removeChatFromCatalog);
 
