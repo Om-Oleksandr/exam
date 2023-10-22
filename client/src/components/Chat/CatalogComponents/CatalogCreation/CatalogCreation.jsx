@@ -5,18 +5,18 @@ import CONSTANTS from '../../../../constants';
 import {
   changeTypeOfChatAdding,
   changeShowAddChatToCatalogMenu,
-  getCatalogList,
+  getCatalogListSql,
 } from '../../../../store/slices/chatSlice';
 import styles from './CatalogCreation.module.sass';
 import AddToCatalog from '../AddToCatalog/AddToCatalog';
 import CreateCatalog from '../CreateCatalog/CreateCatalog';
 
 class CatalogCreation extends React.Component {
-  componentDidMount() {
-    this.props.getCatalogList();
+  componentDidMount () {
+    this.props.getCatalogListSql();
   }
 
-  render() {
+  render () {
     const {
       changeTypeOfChatAdding,
       catalogCreationMode,
@@ -30,7 +30,7 @@ class CatalogCreation extends React.Component {
         {!isFetching && (
           <div className={styles.catalogCreationContainer}>
             <i
-              className="far fa-times-circle"
+              className='far fa-times-circle'
               onClick={() => changeShowAddChatToCatalogMenu()}
             />
             <div className={styles.buttonsContainer}>
@@ -67,13 +67,13 @@ class CatalogCreation extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => state.chatStore;
+const mapStateToProps = state => state.chatStore;
 
-const mapDispatchToProps = (dispatch) => ({
-  changeTypeOfChatAdding: (data) => dispatch(changeTypeOfChatAdding(data)),
+const mapDispatchToProps = dispatch => ({
+  changeTypeOfChatAdding: data => dispatch(changeTypeOfChatAdding(data)),
   changeShowAddChatToCatalogMenu: () =>
     dispatch(changeShowAddChatToCatalogMenu()),
-  getCatalogList: () => dispatch(getCatalogList()),
+  getCatalogListSql: () => dispatch(getCatalogListSql()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CatalogCreation);

@@ -13,7 +13,7 @@ module.exports = {
   SQUADHELP_BANK_NAME: 'SquadHelp',
   SQUADHELP_BANK_CVC: '453',
   SQUADHELP_BANK_EXPIRY: '11/25',
-  ROLES: {
+  ROLES:{
   CUSTOMER: 'customer',
   CREATOR: 'creator',
   MODERATOR: 'moderator',

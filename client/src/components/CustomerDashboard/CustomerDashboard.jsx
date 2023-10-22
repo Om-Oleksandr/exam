@@ -42,21 +42,9 @@ class CustomerDashboard extends React.Component {
     this.props.history.push(`/contest/${contest_id}`);
   };
 
-  setContestList = () => {
-    const array = [];
-    const { contests } = this.props;
-    for (let i = 0; i < contests.length; i++) {
-      array.push(
-        <ContestBox
-          data={contests[i]}
-          key={contests[i].id}
-          goToExtended={this.goToExtended}
-        />
-      );
-    }
-    return array;
-  };
-
+  mapContests = elem => (
+    <ContestBox data={elem} key={elem.id} goToExtended={this.goToExtended} />
+  );
   componentWillUnmount () {
     this.props.clearContestsList();
   }
@@ -67,8 +55,7 @@ class CustomerDashboard extends React.Component {
   };
 
   render () {
-    const { error, haveMore } = this.props;
-    const { customerFilter } = this.props;
+    const { error, haveMore, customerFilter, contests } = this.props;
     return (
       <div className={styles.mainContainer}>
         <div className={styles.filterContainer}>
@@ -122,7 +109,7 @@ class CustomerDashboard extends React.Component {
               history={this.props.history}
               haveMore={haveMore}
             >
-              {this.setContestList()}
+              {contests.map(this.mapContests)}
             </ContestsContainer>
           )}
         </div>
@@ -135,7 +122,9 @@ const mapStateToProps = state => state.contestsList;
 
 const mapDispatchToProps = dispatch => ({
   getContests: data =>
-    dispatch(getContests({ requestData: data, role: CONSTANTS.ROLES.CUSTOMER })),
+    dispatch(
+      getContests({ requestData: data, role: CONSTANTS.ROLES.CUSTOMER })
+    ),
   clearContestsList: () => dispatch(clearContestsList()),
   newFilter: filter => dispatch(setNewCustomerFilter(filter)),
 });

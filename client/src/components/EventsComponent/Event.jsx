@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { differenceInDays } from 'date-fns';
 import { useDispatch } from 'react-redux';
+import cx from 'classnames';
 import { removeEvent, setAlert } from '../../store/slices/eventsSlice';
 import styles from './Events.module.sass';
 const Event = props => {
@@ -60,16 +61,15 @@ const Event = props => {
   }, [event]);
 
   const deleteEvent = (e, id) => {
-    // e.target.parentNode.remove();
     dispatch(removeEvent(id));
   };
   const calculateProgress = () => {
     const totalDuration = event.date - event.createdAt;
-    const remainingDuration = Math.max(remainingTime, 0); // Ensure the progress is not negative
+    const remainingDuration = Math.max(remainingTime, 0);
     return ((totalDuration - remainingDuration) / totalDuration) * 100;
   };
   return (
-    <li>
+    <li className={cx({ [styles.alert]: event.alert })}>
       <span>{event.name}</span>
       {remainingTime >= 0 ? (
         <div>

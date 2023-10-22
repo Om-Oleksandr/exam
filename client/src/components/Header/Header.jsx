@@ -9,10 +9,16 @@ import { getUser } from '../../store/slices/userSlice';
 import { getEvents } from '../../store/slices/eventsSlice';
 class Header extends React.Component {
   componentDidMount () {
-    if (!this.props.userStore.data) {
+    const storedEvents = localStorage.getItem('events');
+    const key = localStorage.getItem('refreshToken');
+    if (
+      !this.props.userStore.data &&
+      this.props.history.location.pathname !== '/login' &&
+      this.props.history.location.pathname !== '/registration' &&
+      key
+    ) {
       this.props.getUser();
     }
-    const storedEvents = localStorage.getItem('events');
     if (storedEvents) {
       const parsedEvents = JSON.parse(storedEvents);
       this.props.getEvents(parsedEvents);
@@ -293,15 +299,14 @@ class Header extends React.Component {
               </ul>
             </div>
             {this.props.userStore.data &&
-             
               this.props.userStore.data.role === CONSTANTS.ROLES.CUSTOMER && (
-                  <div
-                    className={styles.startContestBtn}
-                    onClick={this.startContests}
-                  >
-                    START CONTEST
-                  </div>
-                )}
+                <div
+                  className={styles.startContestBtn}
+                  onClick={this.startContests}
+                >
+                  START CONTEST
+                </div>
+              )}
           </div>
         </div>
       </div>

@@ -2,29 +2,38 @@ import React from 'react';
 import classNames from 'classnames';
 import styles from './DialogBox.module.sass';
 import CONSTANTS from '../../../../constants';
+import { useDispatch } from 'react-redux';
+import {
+  changeChatBlockSql,
+  changeChatFavoriteSql,
+} from '../../../../store/slices/chatSlice';
 
 const DialogBox = props => {
   const {
     chatPreview,
     userId,
     getTimeStr,
-    changeFavorite,
-    changeBlackList,
     catalogOperation,
     goToExpandedDialog,
     chatMode,
     interlocutor,
   } = props;
-  const {
-    favoriteList,
-    participants,
-    blackList,
-    _id,
-    text,
-    createAt,
-  } = chatPreview;
+  const { favoriteList, participants, blackList, id, text, createAt } =
+    chatPreview;
+  const dispatch = useDispatch();
+
   const isFavorite = favoriteList[participants.indexOf(userId)];
   const isBlocked = blackList[participants.indexOf(userId)];
+
+  const changeFavorite = (data, event) => {
+    dispatch(changeChatFavoriteSql(data));
+    event.stopPropagation();
+  };
+
+  const changeBlackList = (data, event) => {
+    dispatch(changeChatBlockSql(data));
+    event.stopPropagation();
+  };
   return (
     <div
       className={styles.previewChatBox}
@@ -33,7 +42,7 @@ const DialogBox = props => {
           interlocutor,
           conversationData: {
             participants,
-            _id,
+            id,
             blackList,
             favoriteList,
           },
@@ -88,12 +97,10 @@ const DialogBox = props => {
             })}
           />
           <i
-            onClick={event => catalogOperation(event, _id)}
+            onClick={event => catalogOperation(event, id)}
             className={classNames({
-              'far fa-plus-square':
-                chatMode !== CONSTANTS.CATALOG_PREVIEW_CHAT_MODE,
-              'fas fa-minus-circle':
-                chatMode === CONSTANTS.CATALOG_PREVIEW_CHAT_MODE,
+              'far fa-plus-square': chatMode !== CONSTANTS.CHAT_MODES.CATALOG,
+              'fas fa-minus-circle': chatMode === CONSTANTS.CHAT_MODES.CATALOG,
             })}
           />
         </div>

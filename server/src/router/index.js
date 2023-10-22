@@ -1,11 +1,10 @@
 const express = require('express');
 const basicMiddlewares = require('../middlewares/basicMiddlewares');
-const hashPass = require('../middlewares/hashPassMiddle');
 const userController = require('../controllers/userController');
 const contestController = require('../controllers/contestController');
 const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
-const chatController = require('../controllers/chatController');
+const sqlChatController = require('../controllers/sqlChatController');
 const upload = require('../utils/fileUpload');
 const authRouter = require('./authRouter');
 const { checkAccessToken } = require('../middlewares/tokenMiddle');
@@ -29,16 +28,10 @@ router.post(
   userController.payment
 );
 
-router.post(
-  '/getCustomersContests',
+router.post('/getCustomersContests', contestController.getCustomersContests);
 
-  contestController.getCustomersContests
-);
-router.get(
-  '/get-moderator-contests',
+router.get('/get-moderator-contests', contestController.getModeratorContests);
 
-  contestController.getModeratorContests
-);
 router.get(
   '/getContestById',
   basicMiddlewares.canGetContest,
@@ -101,30 +94,29 @@ router.post(
   userController.cashout
 );
 
-router.post('/newMessage', chatController.addMessage);
+router.post('/new-message', sqlChatController.addMessage);
 
-router.post('/getChat', chatController.getChat);
+router.post('/get-chat', sqlChatController.getChat);
 
-router.post('/getPreview', chatController.getPreview);
+router.post('/get-preview', sqlChatController.getPreview);
 
-router.post('/blackList', chatController.blackList);
+router.post('/black-list', sqlChatController.blackList);
 
-router.post('/favorite', chatController.favoriteChat);
+router.post('/favorite-sql', sqlChatController.favoriteChat);
 
-router.post('/createCatalog', chatController.createCatalog);
+router.post('/create-catalog', sqlChatController.createCatalog);
 
-router.post('/updateNameCatalog', chatController.updateNameCatalog);
+router.post('/update-name-natalog', sqlChatController.updateNameCatalog);
+
+router.post('/add-new-chat-to-catalog', sqlChatController.addNewChatToCatalog);
 
 router.post(
-  '/addNewChatToCatalog',
-
-  chatController.addNewChatToCatalog
+  '/remove-chat-from-catalog',
+  sqlChatController.removeChatFromCatalog
 );
 
-router.post('/removeChatFromCatalog', chatController.removeChatFromCatalog);
+router.post('/delete-catalog', sqlChatController.deleteCatalog);
 
-router.post('/deleteCatalog', chatController.deleteCatalog);
-
-router.post('/getCatalogs', chatController.getCatalogs);
+router.post('/get-catalogs', sqlChatController.getCatalogs);
 
 module.exports = router;

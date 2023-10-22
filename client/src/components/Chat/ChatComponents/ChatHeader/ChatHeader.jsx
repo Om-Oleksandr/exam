@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import {
   backToDialogList,
-  changeChatFavorite,
-  changeChatBlock,
+  changeChatFavoriteSql,
+  changeChatBlockSql,
 } from '../../../../store/slices/chatSlice';
 import styles from './ChatHeader.module.sass';
 import CONSTANTS from '../../../../constants';
 
 const ChatHeader = (props) => {
   const changeFavorite = (data, event) => {
-    props.changeChatFavorite(data);
+    props.changeChatFavoriteSql(data);
     event.stopPropagation();
   };
 
   const changeBlackList = (data, event) => {
-    props.changeChatBlock(data);
+    props.changeChatBlockSql(data)
     event.stopPropagation();
   };
 
@@ -101,8 +101,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   backToDialogList: () => dispatch(backToDialogList()),
-  changeChatFavorite: (data) => dispatch(changeChatFavorite(data)),
-  changeChatBlock: (data) => dispatch(changeChatBlock(data)),
+  changeChatFavoriteSql: (data) => dispatch(changeChatFavoriteSql(data)),
+  changeChatBlockSql: (data) => dispatch(changeChatBlockSql(data))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatHeader);

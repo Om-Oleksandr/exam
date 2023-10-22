@@ -77,6 +77,8 @@
             transform: scale(1)
 .list
     flex: 1 0 65%
+    @media(max-width: 568px)
+        max-width: 100%
     & > h3
         font-size: 2.5rem
         padding: 1rem
@@ -86,12 +88,38 @@
             text-transform: uppercase
     ul
         padding: 1rem
+    ul li.alert
+        position: relative
+        &::before
+            content: ''
+            position: absolute
+            top: 0
+            left: 0
+            width: 0
+            height: 0
+            border:
+                top: 15px solid transparent
+                bottom: 15px solid transparent
+                right: 15px solid #FA3E3E
+            transform-origin: center left
+            transform: translate(0, -50%) rotate(45deg)
+            z-index: 1000
     ul li:first-child
         font-size: 2.5rem
         padding: 0
         margin-bottom: 1.25rem
         @media(max-width: 568px)
-            font-size: 1.5rem
+            font-size: 1.4rem
+    ul li:not(li:first-child)
+        div 
+            @media(max-width: 568px)
+                max-width: 50%
+            span
+                @media(max-width: 568px)
+                    overflow: hidden
+                    text-overflow: ellipsis
+                    text-wrap: nowrap
+                    white-space: nowrap
     ul li
         display: flex
         position: relative

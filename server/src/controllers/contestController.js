@@ -322,20 +322,20 @@ module.exports.getCustomersContests = (req, res, next) => {
         model: db.Offer,
         required: false,
         attributes: ['id', 'approvedStatus'],
+        where: {approvedStatus: CONSTANTS.APPROVE_STATUSES.APPROVED}
       },
     ],
   })
     .then(contests => {
       contests.forEach(contest => {
-        contest.dataValues.validOffers = contest.dataValues.Offers.filter(
-          offer => offer.approvedStatus === CONSTANTS.APPROVE_STATUSES.APPROVED
-        ).length;
+        contest.dataValues.validOffers = contest.dataValues.Offers.length;
         delete contest.dataValues.Offers;
       });
       let haveMore = true;
       if (contests.length === 0) {
         haveMore = false;
       }
+      console.log(contests);
       return res.send({ contests, haveMore });
     })
     .catch(err => next(new ServerError(err)));

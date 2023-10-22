@@ -11,13 +11,14 @@ const Dashboard = props => {
   return (
     <div>
       <Header />
-      {role === CONSTANTS.ROLES.CUSTOMER ? (
-        <CustomerDashboard history={history} match={props.match} />
-      ) : role === CONSTANTS.ROLES.CREATOR ? (
-        <CreatorDashboard history={history} match={props.match} />
-      ) : (
-        <ModeratorDashboard history={history}/>
-      )}
+      {role &&
+        (role === CONSTANTS.ROLES.CUSTOMER ? (
+          <CustomerDashboard history={history} match={props.match} />
+        ) : role === CONSTANTS.ROLES.CREATOR ? (
+          <CreatorDashboard history={history} match={props.match} />
+        ) : (
+          <ModeratorDashboard history={history} />
+        ))}
     </div>
   );
 };
