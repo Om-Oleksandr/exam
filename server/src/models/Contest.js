@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       contestType: {
         allowNull: false,
-        type: DataTypes.ENUM(...Object.values(CONTEST_TYPES)),
+        type: DataTypes.ENUM(Object.values(CONTEST_TYPES)),
       },
       fileName: {
         allowNull: true,
@@ -77,7 +77,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       status: {
-        type: DataTypes.ENUM(...Object.values(CONTEST_STATUSES)),
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       prize: {

@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       buyerDecision: {
-        type: DataTypes.ENUM(...Object.values(OFFER_STATUSES)),
+        type: DataTypes.TEXT,
         allowNull: true,
         defaultValue: OFFER_STATUSES.PENDING,
       },

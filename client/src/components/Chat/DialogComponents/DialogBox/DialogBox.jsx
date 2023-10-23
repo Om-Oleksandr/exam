@@ -24,8 +24,12 @@ const DialogBox = props => {
 
   const isFavorite = favoriteList[participants.indexOf(userId)];
   const isBlocked = blackList[participants.indexOf(userId)];
-
+  console.log(userId);
+  console.log(participants);
+  console.log(favoriteList);
+  console.log(isFavorite);
   const changeFavorite = (data, event) => {
+    console.log(isFavorite);
     dispatch(changeChatFavoriteSql(data));
     event.stopPropagation();
   };

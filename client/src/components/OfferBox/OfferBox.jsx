@@ -11,6 +11,7 @@ import {
   clearChangeMarkError,
   changeShowImage,
   changeValidOffers,
+  getContestById,
 } from '../../store/slices/contestByIdSlice';
 import CONSTANTS from '../../constants';
 import styles from './OfferBox.module.sass';
@@ -94,6 +95,7 @@ const OfferBox = props => {
   };
 
   const changeMark = value => {
+    const { page, limit } = props.paginationData;
     props.clearError();
     props.changeMark({
       mark: value,
@@ -101,6 +103,9 @@ const OfferBox = props => {
       isFirst: !props.data.mark,
       creatorId: props.data.User.id,
     });
+    // .then(() =>
+    //   props.getContestById({ contestId: props.contestData.id, page, limit })
+    // );
   };
 
   const offerStatus = () => {
@@ -131,10 +136,9 @@ const OfferBox = props => {
 
   const { data, role, id, contestData } = props;
   const { avatar, firstName, lastName, email, rating } = props.data.User;
+  const offerRating = props.data.Rating;
   return (
-    <div
-      className={styles.offerContainer}
-    >
+    <div className={styles.offerContainer}>
       {offerStatus()}
       <div className={styles.mainInfoContainer}>
         <div className={styles.userInfo}>
@@ -195,8 +199,18 @@ const OfferBox = props => {
           ) : (
             <span className={styles.response}>{data.text}</span>
           )}
-          {data.User.id !== id && role !== CONSTANTS.MODERATOR && (
+          {data.User.id !== id && role !== CONSTANTS.ROLES.MODERATOR && (
             <Rating
+              initialRating={
+                offerRating === null && props.data.mark !== null
+                  ? props.data.mark
+                  : offerRating.mark
+              }
+              readonly={
+                offerRating === null && props.data.hasOwnProperty('mark') === false
+                  ? false
+                  : (props.data.mark || offerRating.mark) > 0
+              }
               fractions={2}
               fullSymbol={
                 <img
@@ -221,9 +235,10 @@ const OfferBox = props => {
             />
           )}
         </div>
-        {role !== CONSTANTS.ROLES.CREATOR && role !== CONSTANTS.ROLES.MODERATOR && (
-          <i onClick={goChat} className='fas fa-comments' />
-        )}
+        {role !== CONSTANTS.ROLES.CREATOR &&
+          role !== CONSTANTS.ROLES.MODERATOR && (
+            <i onClick={goChat} className='fas fa-comments' />
+          )}
         {role === CONSTANTS.ROLES.MODERATOR && (
           <div>
             <button
@@ -262,6 +277,7 @@ const mapDispatchToProps = dispatch => ({
   changeShowImage: data => dispatch(changeShowImage(data)),
   setModeratorDecision: data => dispatch(setModeratorDecision(data)),
   setValidOffers: data => dispatch(changeValidOffers(data)),
+  getContestById: data => dispatch(getContestById(data)),
 });
 
 const mapStateToProps = state => {

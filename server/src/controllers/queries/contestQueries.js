@@ -12,6 +12,7 @@ module.exports.updateContest = async (data, predicate, transaction) => {
 };
 
 module.exports.updateContestStatus = async (data, predicate, transaction) => {
+  console.log('UPDATE DATA', data);
   const updateResult = await db.Contest.update(data,
     { where: predicate, returning: true, transaction });
   if (updateResult[ 0 ] < 1) {

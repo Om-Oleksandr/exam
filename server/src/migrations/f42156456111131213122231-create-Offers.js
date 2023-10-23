@@ -38,7 +38,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       buyerDecision: {
-        type: Sequelize.ENUM(...Object.values(OFFER_STATUSES)),
+        type: Sequelize.TEXT,
         allowNull: true,
         defaultValue: OFFER_STATUSES.PENDING,
       },

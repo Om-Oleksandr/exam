@@ -36,15 +36,6 @@ export const getContestById = decorateAsyncThunk({
   },
 });
 
-// export const getContestOffers = decorateAsyncThunk({
-//   key: `${CONTEST_BY_ID_SLICE_NAME}/getContestOffers`,
-//   thunk: async payload => {
-//     const { data } = await restController.getContestById(payload);
-//     delete data.Offers;
-//     return { contestData: data};
-//   },
-// })
-
 const getContestByIdExtraReducers = createExtraReducers({
   thunk: getContestById,
   pendingReducer: state => {

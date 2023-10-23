@@ -28,6 +28,7 @@ class CustomerDashboard extends React.Component {
   getContests = () => {
     this.props.getContests({
       limit: 8,
+      offset: 0,
       contestStatus: this.props.customerFilter,
     });
   };

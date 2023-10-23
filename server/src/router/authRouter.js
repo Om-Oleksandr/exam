@@ -6,7 +6,7 @@ const authRouter = express.Router();
 authRouter.post(
   '/sign-up',
   validators.validateRegistrationData,
-  AuthController.signUp
+  AuthController.signUp,
 );
 authRouter.post('/sign-in', validators.validateLogin, AuthController.logIn);
 authRouter.post('/refresh', AuthController.refresh);

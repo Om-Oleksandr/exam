@@ -22,18 +22,15 @@ class Dialog extends React.Component {
     this.messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
   };
 
-  componentWillReceiveProps (nextProps, nextContext) {
-    if (nextProps.interlocutor.id !== this.props.interlocutor.id) {
-      this.props.getSqlDialog({ interlocutorId: nextProps.interlocutor.id })
-    }
-  }
-
   componentWillUnmount () {
     this.props.clearMessageList();
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (nextProps, nextContext) {
     if (this.messagesEnd.current) this.scrollToBottom();
+    if (nextProps.interlocutor.id !== this.props.interlocutor.id) {
+      this.props.getSqlDialog({ interlocutorId: nextProps.interlocutor.id })
+    }
   }
 
   renderMainDialog = () => {

@@ -1,122 +1,137 @@
+// const express = require('express');
+// const { checkAccessToken } = require('../middlewares/tokenMiddle');
+// const authRouter = require('./authRouter');
+
+// const userRouter = require('./userRouter');
+// const contestRouter = require('./contestRouter');
+
+// const router = express.Router();
+
+// router.use('/auth', checkAccessToken, authRouter);
+// router.use('/user', userRouter);
+// router.use('/contest', contestRouter);
+
+// router.use(checkAccessToken);
+
+
+// module.exports = router;
+
 const express = require('express');
-const basicMiddlewares = require('../middlewares/basicMiddlewares');
-const userController = require('../controllers/userController');
 const contestController = require('../controllers/contestController');
-const checkToken = require('../middlewares/checkToken');
-const validators = require('../middlewares/validators');
 const sqlChatController = require('../controllers/sqlChatController');
-const upload = require('../utils/fileUpload');
 const authRouter = require('./authRouter');
 const { checkAccessToken } = require('../middlewares/tokenMiddle');
+const userRouter = require('./userRouter');
+const contestRouter = require('./contestRouter');
+const chatRouter = require('./chatRouter');
 
 const router = express.Router();
 
 router.use('/auth', authRouter);
-
-router.post('/getUser', checkToken.checkAuth);
+router.use('/user', checkAccessToken, userRouter);
+router.use('/contest', checkAccessToken, contestRouter);
+router.use('/chat', checkAccessToken, chatRouter);
+// router.post('/getUser', checkToken.checkAuth);
 
 router.use(checkAccessToken);
 
-router.post('/dataForContest', contestController.dataForContest);
+// router.post('/dataForContest', contestController.dataForContest);
 
-router.post(
-  '/pay',
-  basicMiddlewares.onlyForCustomer,
-  upload.uploadContestFiles,
-  basicMiddlewares.parseBody,
-  validators.validateContestCreation,
-  userController.payment
-);
+// router.post(
+//   '/pay',
+//   basicMiddlewares.onlyForCustomer,
+//   upload.uploadContestFiles,
+//   basicMiddlewares.parseBody,
+//   validators.validateContestCreation,
+//   userController.payment
+// );
 
-router.post('/getCustomersContests', contestController.getCustomersContests);
+// router.get('/getCustomersContests', contestController.getCustomersContests);
 
-router.get('/get-moderator-contests', contestController.getModeratorContests);
+// router.get('/get-moderator-contests', contestController.getModeratorContests);
 
-router.get(
-  '/getContestById',
-  basicMiddlewares.canGetContest,
-  contestController.getContestById
-);
+// router.get(
+//   '/getContestById',
+//   basicMiddlewares.canGetContest,
+//   contestController.getContestById
+// );
 
-router.post(
-  '/getAllContests',
-  basicMiddlewares.onlyForCreative,
-  contestController.getContests
-);
+// router.post(
+//   '/getAllContests',
+//   basicMiddlewares.onlyForCreative,
+//   contestController.getContests
+// );
 
-router.get(
-  '/downloadFile/:fileName',
+// router.get(
+//   '/downloadFile/:fileName',
+//   contestController.downloadFile
+// );
 
-  contestController.downloadFile
-);
+// router.post(
+//   '/updateContest',
+//   upload.updateContestFile,
+//   contestController.updateContest
+// );
 
-router.post(
-  '/updateContest',
-  upload.updateContestFile,
-  contestController.updateContest
-);
+// router.post(
+//   '/setNewOffer',
+//   upload.uploadLogoFiles,
+//   basicMiddlewares.canSendOffer,
+//   contestController.setNewOffer
+// );
 
-router.post(
-  '/setNewOffer',
-  upload.uploadLogoFiles,
-  basicMiddlewares.canSendOffer,
-  contestController.setNewOffer
-);
+// router.post(
+//   '/setOfferStatus',
+//   basicMiddlewares.onlyForCustomerWhoCreateContest,
+//   contestController.setOfferStatus
+// );
 
-router.post(
-  '/setOfferStatus',
-  basicMiddlewares.onlyForCustomerWhoCreateContest,
-  contestController.setOfferStatus
-);
+// router.post(
+//   '/set-moderator-decision',
+//   contestController.setModeratorDecision
+// );
 
-router.post(
-  '/set-moderator-decision',
+// router.post(
+//   '/changeMark',
+//   basicMiddlewares.onlyForCustomer,
+//   userController.changeMark
+// );
 
-  contestController.setModeratorDecision
-);
+// router.post(
+//   '/updateUser',
+//   upload.uploadAvatar,
+//   userController.updateUser
+// );
 
-router.post(
-  '/changeMark',
-  basicMiddlewares.onlyForCustomer,
-  userController.changeMark
-);
+// router.post(
+//   '/cashout',
+//   basicMiddlewares.onlyForCreative,
+//   userController.cashout
+// );
 
-router.post(
-  '/updateUser',
+// router.post('/new-message', sqlChatController.addMessage);
 
-  upload.uploadAvatar,
-  userController.updateUser
-);
+// router.post('/get-chat', sqlChatController.getChat);
 
-router.post(
-  '/cashout',
-  basicMiddlewares.onlyForCreative,
-  userController.cashout
-);
+// router.post('/get-preview', sqlChatController.getPreview);
 
-router.post('/new-message', sqlChatController.addMessage);
+// router.post('/black-list', sqlChatController.blackList);
 
-router.post('/get-chat', sqlChatController.getChat);
+// router.post('/favorite-sql', sqlChatController.favoriteChat);
 
-router.post('/get-preview', sqlChatController.getPreview);
+// router.post('/create-catalog', sqlChatController.createCatalog);
 
-router.post('/black-list', sqlChatController.blackList);
+// router.post('/update-name-natalog', sqlChatController.updateNameCatalog);
 
-router.post('/favorite-sql', sqlChatController.favoriteChat);
+// router.post('/add-new-chat-to-catalog', sqlChatController.addNewChatToCatalog);
 
-router.post('/create-catalog', sqlChatController.createCatalog);
+// router.post(
+//   '/remove-chat-from-catalog',
+//   sqlChatController.removeChatFromCatalog
+// );
 
-router.post('/update-name-natalog', sqlChatController.updateNameCatalog);
+// router.post('/delete-catalog', sqlChatController.deleteCatalog);
 
-router.post('/add-new-chat-to-catalog', sqlChatController.addNewChatToCatalog);
-
-router.post(
-  '/remove-chat-from-catalog',
-  sqlChatController.removeChatFromCatalog
-);
-
-router.post('/delete-catalog', sqlChatController.deleteCatalog);
-
-router.post('/get-catalogs', sqlChatController.getCatalogs);
+// router.post('/get-catalogs', sqlChatController.getCatalogs);
 
 module.exports = router;

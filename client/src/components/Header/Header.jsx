@@ -10,13 +10,7 @@ import { getEvents } from '../../store/slices/eventsSlice';
 class Header extends React.Component {
   componentDidMount () {
     const storedEvents = localStorage.getItem('events');
-    const key = localStorage.getItem('refreshToken');
-    if (
-      !this.props.userStore.data &&
-      this.props.history.location.pathname !== '/login' &&
-      this.props.history.location.pathname !== '/registration' &&
-      key
-    ) {
+    if (!this.props.userStore.data) {
       this.props.getUser();
     }
     if (storedEvents) {

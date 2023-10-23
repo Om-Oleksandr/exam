@@ -88,7 +88,7 @@ class CreatorDashboard extends React.Component {
     );
   };
 
-  componentDidUpdate(nextProps, nextContext) {
+  componentDidUpdate (nextProps, nextContext) {
     if (nextProps.location.search !== this.props.location.search) {
       this.parseUrlForParams(nextProps.location.search);
       this.getContests(this.props.creatorFilter);
@@ -96,7 +96,7 @@ class CreatorDashboard extends React.Component {
   }
 
   componentDidMount () {
-    this.props.getDataForContest();
+    this.props.getDataForContest({ characteristic1: '', characteristic2: '' });
     if (
       this.parseUrlForParams(this.props.location.search) &&
       !this.props.contests.length
@@ -176,11 +176,7 @@ class CreatorDashboard extends React.Component {
       contest => contest.status === CONSTANTS.CONTEST_STATUSES.ACTIVE
     );
     const contestsList = filteredContest.map(elem => (
-      <ContestBox
-        data={elem}
-        key={elem.id}
-        goToExtended={this.goToExtended}
-      />
+      <ContestBox data={elem} key={elem.id} goToExtended={this.goToExtended} />
     ));
     return contestsList;
   };
@@ -286,8 +282,8 @@ const mapStateToProps = state => {
   return { ...contestsList, dataForContest };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getContests: (data) =>
+const mapDispatchToProps = dispatch => ({
+  getContests: data =>
     dispatch(getContests({ requestData: data, role: CONSTANTS.ROLES.CREATOR })),
   clearContestsList: () => dispatch(clearContestsList()),
   newFilter: filter => dispatch(setNewCreatorFilter(filter)),

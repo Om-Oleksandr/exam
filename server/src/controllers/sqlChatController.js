@@ -63,11 +63,12 @@ module.exports.getChat = async (req, res, next) => {
   try {
     const {
       tokenData: { userId },
-      body: { interlocutorId },
+      headers: { interlocutorid },
     } = req;
+    console.log(req.headers);
     const { participant1, participant2 } = handleParticipants(
       userId,
-      interlocutorId
+      interlocutorid
     );
     const messages = await Message.findAll({
       include: [
@@ -78,7 +79,7 @@ module.exports.getChat = async (req, res, next) => {
       ],
     });
 
-    const interlocutor = await User.findByPk(interlocutorId, {
+    const interlocutor = await User.findByPk(interlocutorid, {
       attributes: ['id', 'firstName', 'lastName', 'displayName', 'avatar'],
     });
     res.send({ messages, interlocutor });
@@ -135,6 +136,7 @@ module.exports.getPreview = async (req, res, next) => {
     });
     res.send({ conversations });
   } catch (error) {
+    console.log('chat error', error);
     next(error);
   }
 };
@@ -186,7 +188,7 @@ module.exports.favoriteChat = async (req, res, next) => {
     });
 
     handleList(chat, userId, 'favoriteList', favoriteFlag);
-    
+
     await chat.save();
     console.log(chat);
     res.send({ chat });
@@ -202,8 +204,8 @@ module.exports.createCatalog = async (req, res, next) => {
       body: { catalogName, chatId },
     } = req;
     const catalog = await Catalog.create({
-      userId: userId,
-      catalogName: catalogName,
+      userId,
+      catalogName,
       conversations: [chatId],
     });
     res.send({ catalog });
@@ -215,9 +217,9 @@ module.exports.createCatalog = async (req, res, next) => {
 module.exports.updateNameCatalog = async (req, res, next) => {
   try {
     const { catalogName, catalogId } = req.body;
-    const [affectedRows, catalog] = await Catalog.update(
+    const [, catalog] = await Catalog.update(
       { catalogName },
-      { where: { id: catalogId }, returning: true }
+      { where: { id: catalogId }, returning: true },
     );
     res.send(...catalog);
   } catch (error) {
@@ -231,12 +233,12 @@ module.exports.addNewChatToCatalog = async (req, res, next) => {
       body: { chatId, catalogId },
     } = req;
 
-    const [affectedRows, catalog] = await Catalog.update(
+    const [, catalog] = await Catalog.update(
       {
         conversations: sequelize.fn(
           'array_append',
           sequelize.col('conversations'),
-          chatId
+          chatId,
         ),
       },
       {

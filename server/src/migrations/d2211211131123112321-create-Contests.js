@@ -10,7 +10,7 @@ module.exports = {
       },
       contestType: {
         allowNull: false,
-        type: Sequelize.ENUM(...Object.values(CONTEST_TYPES)),
+        type: Sequelize.ENUM(Object.values(CONTEST_TYPES)),
       },
       fileName: {
         allowNull: true,
@@ -54,7 +54,7 @@ module.exports = {
       },
       status: {
         allowNull: false,
-        type: Sequelize.ENUM(...Object.values(CONTEST_STATUSES)),
+        type: Sequelize.TEXT,
       },
       brandStyle: {
         allowNull: true,
