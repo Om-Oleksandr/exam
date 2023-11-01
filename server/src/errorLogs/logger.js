@@ -1,4 +1,4 @@
-// errorLogger.js
+
 const fs = require('fs');
 const path = require('path');
 
@@ -17,13 +17,28 @@ if (fs.existsSync(logFilePath)) {
 }
 
 module.exports = (err, req, res, next) => {
+  const stackTraceLines = err.stack.split('\n');
+
+  const stackTrace = stackTraceLines.slice(1).map(line => {
+    const match = line.match(/at\s(.+)\s\((.+):(\d+):(\d+)\)/);
+    if (match) {
+      const [, functionName, filePath, lineNumber, columnNumber] = match;
+      return {
+        functionName: functionName.trim(),
+        filePath: filePath.trim(),
+        lineNumber: parseInt(lineNumber),
+        columnNumber: parseInt(columnNumber),
+      };
+    } else {
+      return line.trim();
+    }
+  });
   const logMessage = {
     message: err.message,
     time: new Date().getTime(),
     code: err.code,
-    stackTrace: {},
+    stackTrace,
   };
-
   logArray.push(logMessage);
 
   fs.writeFile(
@@ -32,7 +47,7 @@ module.exports = (err, req, res, next) => {
     { flag: 'w' },
     error => {
       if (error) console.error('Error writing to error log:', error);
-    }
+    },
   );
 
   next(err);
