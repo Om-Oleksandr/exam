@@ -3,7 +3,7 @@ import httpClient from '../interceptor';
 export const registerRequest = data => httpClient.post('auth/sign-up', data);
 export const loginRequest = data => httpClient.post('auth/sign-in', data);
 
-export const getUser = () => httpClient.get('user/getUser');
+export const getUser = () => httpClient.get('getUser');
 export const cashOut = data => httpClient.post('user/cashout', data);
 export const updateUser = data => httpClient.post('user/updateUser', data);
 export const payMent = data => httpClient.post('user/pay', data.formData);

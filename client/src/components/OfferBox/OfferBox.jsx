@@ -95,7 +95,6 @@ const OfferBox = props => {
   };
 
   const changeMark = value => {
-    const { page, limit } = props.paginationData;
     props.clearError();
     props.changeMark({
       mark: value,
@@ -103,9 +102,6 @@ const OfferBox = props => {
       isFirst: !props.data.mark,
       creatorId: props.data.User.id,
     });
-    // .then(() =>
-    //   props.getContestById({ contestId: props.contestData.id, page, limit })
-    // );
   };
 
   const offerStatus = () => {
