@@ -20,7 +20,6 @@ const createToken = (payload, { secret, time }) => {
     }
   );
 };
-console.log('token', process.env.ACCESS_SECRET);
 module.exports.createTokenPair = async payload => {
   return {
     access: await createToken(payload, {

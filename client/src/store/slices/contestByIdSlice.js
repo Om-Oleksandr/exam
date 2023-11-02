@@ -65,7 +65,7 @@ export const addOffer = decorateAsyncThunk({
 const addOfferExtraReducers = createExtraReducers({
   thunk: addOffer,
   fulfilledReducer: (state, { payload }) => {
-    state.offers.unshift(payload);
+    state.offers.unshift({ ...payload.result, User: payload.user });
     state.error = null;
   },
   rejectedReducer: (state, { payload }) => {
@@ -131,7 +131,7 @@ const changeMarkExtraReducers = createExtraReducers({
 
 export const setModeratorDecision = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/setModeratorDecision`,
-  thunk: async (status) => {
+  thunk: async status => {
     const { data } = await restController.setModeratorDecision(status);
     return data;
   },
@@ -165,9 +165,9 @@ const reducers = {
     state.isShowOnFull = isShowOnFull;
     state.imagePath = imagePath;
   },
-  changeValidOffers: (state, {payload})=>{
+  changeValidOffers: (state, { payload }) => {
     state.contestData.validOffers = payload - 1;
-  }
+  },
 };
 
 const extraReducers = builder => {
@@ -205,7 +205,7 @@ export const {
   clearSetOfferStatusError,
   clearChangeMarkError,
   changeShowImage,
-  changeValidOffers
+  changeValidOffers,
 } = actions;
 
 export default reducer;

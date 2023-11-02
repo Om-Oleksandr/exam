@@ -6,7 +6,6 @@ const CONSTANTS = require('../constants');
 
 module.exports.parseBody = (req, res, next) => {
   req.body.contests = JSON.parse(req.body.contests);
-  console.log('body', req.body);
   for (let i = 0; i < req.body.contests.length; i++) {
     if (req.body.contests[i].haveFile) {
       const file = req.files.splice(0, 1);
@@ -56,11 +55,9 @@ module.exports.onlyForCreative = (req, res, next) => {
 };
 
 module.exports.onlyForCustomer = (err, req, res, next) => {
-  console.log('CHANGE MARK', req.tokenData);
   if (req.tokenData.role !== CONSTANTS.ROLES.CUSTOMER) {
     return next(new RightsError('this page only for customers'));
   } else {
-    console.log('CHANGE MARK ERROR', err);
     next();
   }
 };

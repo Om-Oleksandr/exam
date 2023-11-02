@@ -65,7 +65,6 @@ module.exports.getChat = async (req, res, next) => {
       tokenData: { userId },
       headers: { interlocutorid },
     } = req;
-    console.log(req.headers);
     const { participant1, participant2 } = handleParticipants(
       userId,
       interlocutorid
@@ -136,7 +135,6 @@ module.exports.getPreview = async (req, res, next) => {
     });
     res.send({ conversations });
   } catch (error) {
-    console.log('chat error', error);
     next(error);
   }
 };
@@ -190,7 +188,6 @@ module.exports.favoriteChat = async (req, res, next) => {
     handleList(chat, userId, 'favoriteList', favoriteFlag);
 
     await chat.save();
-    console.log(chat);
     res.send({ chat });
   } catch (error) {
     next(error);

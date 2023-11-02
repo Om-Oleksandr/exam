@@ -33,7 +33,6 @@ module.exports.dataForContest = async (req, res, next) => {
     });
     return res.send(response);
   } catch (err) {
-    console.log('BLYAT', err);
     next(new ServerError('cannot get contest preferences'));
   }
 };
@@ -138,7 +137,6 @@ module.exports.getContestById = async (req, res, next) => {
 
     res.send(contestInfo);
   } catch (e) {
-    console.log('contestbyid', e);
     next(new ServerError());
   }
 };
@@ -192,8 +190,7 @@ module.exports.setNewOffer = async (req, res, next) => {
     controller
       .getNotificationController()
       .emitEntryCreated(req.body.customerId);
-    const data = { ...result.dataValues, User: { ...user.dataValues } };
-    console.log(data);
+    const data = { result, user };
     return res.send(data);
   } catch (e) {
     return next(new ServerError());
@@ -258,19 +255,10 @@ const resolveOffer = async (
     transaction
   );
   transaction.commit();
-  const arrayRoomsId = [];
-  updatedOffers.forEach(offer => {
-    if (
-      offer.buyerDecision === CONSTANTS.OFFER_STATUSES.REJECTED &&
-      creatorId !== offer.userId
-    ) {
-      arrayRoomsId.push(offer.userId);
-    }
-  });
   controller
     .getNotificationController()
     .emitChangeOfferStatus(
-      arrayRoomsId,
+      creatorId,
       'Someone of yours offers was rejected',
       contestId
     );
@@ -307,14 +295,12 @@ module.exports.setOfferStatus = async (req, res, next) => {
       return res.send(winningOffer);
     } catch (err) {
       transaction.rollback();
-      console.log('offer status', err);
       next(err);
     }
   }
 };
 
 module.exports.getCustomersContests = (req, res, next) => {
-  console.log('customer', req.headers);
   db.Contest.findAll({
     where: { status: req.headers.status, userId: req.tokenData.userId },
     limit: req.headers.limit,
@@ -338,7 +324,6 @@ module.exports.getCustomersContests = (req, res, next) => {
       if (contests.length < req.headers.limit) {
         haveMore = false;
       }
-      console.log(contests);
       return res.send({ contests, haveMore });
     })
     .catch(err => next(new ServerError(err)));
@@ -346,7 +331,6 @@ module.exports.getCustomersContests = (req, res, next) => {
 
 module.exports.getContests = async (req, res, next) => {
   try {
-    console.log(req.tokenData);
     const contests = await db.Contest.findAll({
       where: { status: 'active' },
       include: [
@@ -355,8 +339,10 @@ module.exports.getContests = async (req, res, next) => {
         },
       ],
     });
-    contests.forEach(contest => contest.dataValues.validOffers = contest.dataValues.Offers.length);
-    console.log(contests);
+    contests.forEach(
+      contest =>
+        (contest.dataValues.validOffers = contest.dataValues.Offers.length)
+    );
     res.send({ contests });
   } catch (error) {
     next(error);

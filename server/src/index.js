@@ -23,8 +23,6 @@ server.listen(PORT, () =>
   console.log(`Example app listening on port ${PORT}!`)
 );
 
-console.log(process.env.ACCESS_SECRET);
-
 controller.createConnection(server);
 
 const currentDate = new Date();

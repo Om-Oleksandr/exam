@@ -29,7 +29,6 @@ module.exports.changeMark = async (req, res, next) => {
   let avg = 0;
   let transaction;
   const { isFirst, offerId, mark, creatorId } = req.body;
-  console.log('body===========', req.body);
   const userId = req.tokenData.userId;
   try {
     // const offerRating = await db.Rating.finOne({ offerId, userId });
@@ -63,14 +62,11 @@ module.exports.changeMark = async (req, res, next) => {
     res.send({ userId: creatorId, rating: avg });
   } catch (err) {
     transaction.rollback();
-    console.log('mark error', err);
     next(err);
   }
 };
 
 module.exports.payment = async (req, res, next) => {
-  console.log(process.env.SQUADHELP_BANK_NUMBER);
-  console.log(req.tokenData);
   let transaction;
   try {
     transaction = await db.sequelize.transaction();
@@ -114,7 +110,6 @@ module.exports.payment = async (req, res, next) => {
     res.send();
   } catch (err) {
     transaction.rollback();
-    console.log('payment', err);
     next(err);
   }
 };

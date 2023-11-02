@@ -56,7 +56,6 @@ const getPreviewChatSqlExtraReducers = createExtraReducers({
 export const getDialogMessagesSql = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getDialogMessagesSql`,
   thunk: async payload => {
-    console.log(payload);
     const { data } = await restController.getSqlDialog(payload);
     return data;
   },
@@ -129,7 +128,6 @@ export const changeChatFavoriteSql = decorateAsyncThunk({
 const changeChatFavoriteExtraReducersSql = createExtraReducers({
   thunk: changeChatFavoriteSql,
   fulfilledReducer: (state, { payload }) => {
-    console.log(payload);
     const { messagesPreview } = state;
     messagesPreview.forEach(preview => {
       if (isEqual(preview.participants, payload.chat.participants))
@@ -269,7 +267,6 @@ const deleteCatalogExtraReducersSql = createExtraReducers({
 export const removeChatFromCatalogSql = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/removeChatFromCatalogSql`,
   thunk: async payload => {
-    console.log(payload);
     const { data } = await restController.removeChatFromCatalogSql(payload);
     return data;
   },
