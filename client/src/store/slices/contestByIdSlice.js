@@ -137,8 +137,6 @@ export const setModeratorDecision = decorateAsyncThunk({
   },
 });
 
-//-----------------------------------------------------
-
 const reducers = {
   updateStoreAfterUpdateContest: (state, { payload }) => {
     state.error = null;

@@ -8,7 +8,6 @@ const eventsSlice = createSlice({
   reducers: {
     addEvent (state, action) {
       state.events.push(action.payload);
-      // state.events.sort((event1, event2) => event1.date - event2.date);
     },
     getEvents (state, action) {
       state.events = action.payload;

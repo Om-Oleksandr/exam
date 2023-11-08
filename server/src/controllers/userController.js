@@ -31,10 +31,6 @@ module.exports.changeMark = async (req, res, next) => {
   const { isFirst, offerId, mark, creatorId } = req.body;
   const userId = req.tokenData.userId;
   try {
-    // const offerRating = await db.Rating.finOne({ offerId, userId });
-    // if (offerRating) {
-    //   return next();
-    // }
     transaction = await db.sequelize.transaction({
       isolationLevel:
         db.Sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED,

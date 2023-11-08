@@ -1,5 +1,4 @@
 const http = require('http');
-// const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
 require('./dbMongo/mongoose');
@@ -8,7 +7,6 @@ const controller = require('./socketInit');
 const handlerError = require('./handlerError/handler');
 const errorLogger = require('./errorLogs/logger');
 const { transformAndCopyFile } = require('./errorLogs/copyLogs');
-// dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(cors());
