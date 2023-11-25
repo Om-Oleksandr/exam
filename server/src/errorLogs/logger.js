@@ -1,54 +1,31 @@
+const winston = require('winston');
+const DailyRotateFile = require('winston-daily-rotate-file');
 
-const fs = require('fs');
-const path = require('path');
+const myTransport = new DailyRotateFile({
+  filename: 'error-%DATE%.log',
+  dirname: 'src/errorLogs/dailyErrors',
+  datePattern: 'DD-MM-YYYY',
+});
 
-const logFilePath = path.join(__dirname, 'error.txt');
-let logArray = [];
+const myFormat = winston.format.printf(err => {
+  const stackTraceLines = err.stack.split('\n');
+  const stackTrace = stackTraceLines
+    .slice(1)
+    .map(line => `\n\t\t"${line.trim()}"`);
+  return `{ \n\t"message": ${err.message},\n\t"code": ${
+    err.code || 500
+  },\n\t"time: ${new Date().getTime()}",\n\t"stackTrace": [${stackTrace}\n\t],\n}`;
+});
 
-if (fs.existsSync(logFilePath)) {
-  const data = fs.readFileSync(logFilePath, 'utf8');
-  if (data !== '') {
-    try {
-      logArray = JSON.parse(data);
-    } catch (error) {
-      throw new Error('Error parsing');
-    }
-  }
-}
+const logger = winston.createLogger({
+  format: winston.format.combine(myFormat),
+  transports: [myTransport],
+});
 
 module.exports = (err, req, res, next) => {
-  const stackTraceLines = err.stack.split('\n');
-
-  const stackTrace = stackTraceLines.slice(1).map(line => {
-    const match = line.match(/at\s(.+)\s\((.+):(\d+):(\d+)\)/);
-    if (match) {
-      const [, functionName, filePath, lineNumber, columnNumber] = match;
-      return {
-        functionName: functionName.trim(),
-        filePath: filePath.trim(),
-        lineNumber: parseInt(lineNumber),
-        columnNumber: parseInt(columnNumber),
-      };
-    } else {
-      return line.trim();
-    }
-  });
-  const logMessage = {
-    message: err.message,
-    time: new Date().getTime(),
-    code: err.code,
-    stackTrace,
-  };
-  logArray.push(logMessage);
-
-  fs.writeFile(
-    logFilePath,
-    JSON.stringify(logArray, null, 2),
-    { flag: 'w' },
-    error => {
-      if (error) console.error('Error writing to error log:', error);
-    },
-  );
-
-  next(err);
+  if (err) {
+    logger.error(err);
+    return next(err);
+  }
+  next();
 };

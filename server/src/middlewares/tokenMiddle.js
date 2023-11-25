@@ -1,23 +1,23 @@
-const createHTTPErrors = require('http-errors');
 const {
   verifyAccessToken,
   verifyRefreshToken,
 } = require('../services/tokenService');
 const TokenError = require('../errors/TokenError');
+const ExpiredToken = require('../errors/ExpiredToken');
 
 module.exports.checkAccessToken = async (req, res, next) => {
   try {
     const {
       headers: { authorization },
-    } = req; 
+    } = req;
     if (authorization) {
       const [, accessToken] = authorization.split(' ');
       req.tokenData = await verifyAccessToken(accessToken);
       return next();
     }
-    next(createHTTPErrors(401, 'Need token'));
-  } catch (error) {
     next(new TokenError());
+  } catch (error) {
+    next(new ExpiredToken());
   }
 };
 
