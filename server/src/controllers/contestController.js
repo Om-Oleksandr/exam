@@ -80,35 +80,44 @@ module.exports.getContestById = async (req, res, next) => {
 
     contestInfo = contestInfo.get({ plain: true });
     const allOffers = await db.Offer.findAll({
-      where: {
+      where: role === CONSTANTS.ROLES.CREATOR ? {
         contestId: contestInfo.id,
-      },
+        userId,
+      } : { contestId: contestInfo.id },
     });
+    console.log(allOffers);
     contestInfo.validOffers =
       role === CONSTANTS.ROLES.CREATOR
         ? allOffers.length
         : contestInfo.Offers.filter(
-            offer =>
-              offer.approvedStatus ===
-              (role === CONSTANTS.ROLES.MODERATOR ? PENDING : APPROVED)
-          ).length;
+          offer =>
+            offer.approvedStatus ===
+            (role === CONSTANTS.ROLES.MODERATOR ? PENDING : APPROVED),
+        ).length;
 
     const offers = await db.Offer.findAll({
-      where: {
-        contestId: contestInfo.id,
-        approvedStatus:
-          role === CONSTANTS.ROLES.MODERATOR
-            ? PENDING
-            : role === CONSTANTS.ROLES.CUSTOMER
-            ? APPROVED
-            : { [db.Sequelize.Op.or]: [PENDING, APPROVED, REJECTED] },
-      },
+      where:
+        role === CONSTANTS.ROLES.CREATOR
+          ? {
+            contestId: contestInfo.id,
+            approvedStatus: {
+              [db.Sequelize.Op.or]: [PENDING, APPROVED, REJECTED],
+            },
+            userId,
+          }
+          : role === CONSTANTS.ROLES.MODERATOR ? {
+            contestId: contestInfo.id,
+            approvedStatus: PENDING,
+          } : {
+            contestId: contestInfo.id,
+            approvedStatus: APPROVED,
+          },
       order:
         role === CONSTANTS.ROLES.CUSTOMER
           ? [['buyerDecision', 'asc']]
           : [['id', 'desc']],
       offset: (page - 1) * limit,
-      limit: limit,
+      limit,
       attributes: { exclude: ['userId', 'contestId'] },
       include: [
         {
