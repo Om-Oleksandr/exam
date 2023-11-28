@@ -19,9 +19,17 @@ const eventsSlice = createSlice({
         }
       });
     },
-    markRead (state, action) {
+    markAllRead (state, action) {
       state.events.forEach(event => {
         if (event.alert === true) {
+          event.isRead = true;
+          event.alert = false;
+        }
+      });
+    },
+    markRead (state, {payload}) {
+      state.events.forEach(event => {
+        if (event.alert === true && event.id === payload) {
           event.isRead = true;
           event.alert = false;
         }
@@ -38,7 +46,7 @@ const eventsSlice = createSlice({
 
 export const {
   reducer,
-  actions: { addEvent, getEvents, setAlert, markRead, removeEvent },
+  actions: { addEvent, getEvents, setAlert, markRead, markAllRead, removeEvent },
 } = eventsSlice;
 
 export default reducer;

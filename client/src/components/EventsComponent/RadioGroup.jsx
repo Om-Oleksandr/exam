@@ -30,6 +30,14 @@ const RadioGroup = props => {
               checked={field.value.reminderType === 'hours'}
               inputError={inputError}
             />
+            <CustomField
+              name='reminderType'
+              type='radio'
+              value='minutes'
+              id='minutes'
+              checked={field.value.reminderType === 'minutes'}
+              inputError={inputError}
+            />
           </div>
         );
       }}

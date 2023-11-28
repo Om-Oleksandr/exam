@@ -231,7 +231,7 @@ const schemas = {
       .required('required'),
     reminderType: yup
       .string()
-      .oneOf(['days', 'hours'])
+      .oneOf(['days', 'hours', 'minutes'])
       .required('selection required'),
   }),
 };

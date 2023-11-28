@@ -6,26 +6,41 @@ import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
 import { clearUserStore } from '../../store/slices/userSlice';
 import { getUser } from '../../store/slices/userSlice';
-import { getEvents } from '../../store/slices/eventsSlice';
+import { getEvents, setAlert } from '../../store/slices/eventsSlice';
+import notificationTime from '../../utils/eventNotificationTime';
 class Header extends React.Component {
   componentDidMount () {
     const storedEvents = localStorage.getItem('events');
-    if (!this.props.userStore.data) {
-      this.props.getUser();
-    }
     if (storedEvents) {
       const parsedEvents = JSON.parse(storedEvents);
       this.props.getEvents(parsedEvents);
+    }
+    if (!this.props.userStore.data) {
+      this.props.getUser();
     }
   }
   componentDidUpdate (prevProps) {
     const {
       events,
       userStore: { data },
+      setAlert,
     } = this.props;
     if (data !== prevProps.data) {
       localStorage.setItem('events', JSON.stringify(events));
     }
+    if (events.length > 0) {
+
+      this.intervalId = setInterval(() => {
+        events.forEach(event => {
+          if (event.alert === false && event.isRead === false) {
+            notificationTime(event, setAlert, this.intervalId);
+          }
+        });
+      }, 1000);
+    }
+  }
+  componentWillUnmount () {
+    clearInterval(this.intervalId);
   }
   logOut = () => {
     localStorage.clear();
@@ -319,6 +334,7 @@ const mapDispatchToProps = dispatch => ({
   getUser: () => dispatch(getUser()),
   clearUserStore: () => dispatch(clearUserStore()),
   getEvents: value => dispatch(getEvents(value)),
+  setAlert: id => dispatch(setAlert(id)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

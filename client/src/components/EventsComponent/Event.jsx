@@ -1,30 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { differenceInDays } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import cx from 'classnames';
-import { removeEvent, setAlert } from '../../store/slices/eventsSlice';
+import {
+  removeEvent,
+  markRead,
+} from '../../store/slices/eventsSlice';
 import styles from './Events.module.sass';
+import convertMilliseconds from '../../utils/convertToMilliseconds';
+
 const Event = props => {
   const { event } = props;
   const dispatch = useDispatch();
   const [remainingTime, setRemainingTime] = useState(
     event.date - Date.now() < 0 ? 0 : event.date - Date.now()
   );
-  const convertMilliseconds = milliseconds => {
-    let seconds = Math.floor(milliseconds / 1000);
-    let minutes = Math.floor(seconds / 60);
-    let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
-
-    seconds %= 60;
-    minutes %= 60;
-    hours %= 24;
-    const daysStr = days > 0 ? `${days} days ` : '';
-    const timeFormat = `${daysStr}${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    return timeFormat;
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,24 +22,6 @@ const Event = props => {
         clearInterval(interval);
       }
     }, 1000);
-
-    const daysDiff = differenceInDays(
-      new Date(event.date),
-      new Date(Date.now())
-    );
-    const hoursDiff = (event.date - Date.now()) / (1000 * 3600);
-    if (
-      (event.reminderType === 'days' &&
-        daysDiff <= Number(event.reminder) &&
-        event.alert === false &&
-        event.isRead === false) ||
-      (event.reminderType === 'hours' &&
-        hoursDiff <= Number(event.reminder) &&
-        event.alert === false &&
-        event.isRead === false)
-    ) {
-      dispatch(setAlert(event.id));
-    }
     return () => {
       clearInterval(interval);
     };
@@ -60,8 +31,11 @@ const Event = props => {
     setRemainingTime(event.date - Date.now());
   }, [event]);
 
-  const deleteEvent = (e, id) => {
+  const deleteEvent = id => {
     dispatch(removeEvent(id));
+  };
+  const readEvent = id => {
+    dispatch(markRead(id));
   };
   const calculateProgress = () => {
     const totalDuration = event.date - event.createdAt;
@@ -74,10 +48,11 @@ const Event = props => {
       {remainingTime >= 0 ? (
         <div>
           <span>{convertMilliseconds(remainingTime)}</span>
-          <button onClick={e => deleteEvent(e, event.id)}>
+          <button onClick={() => deleteEvent(event.id)}>
             <span></span>
             <span></span>
           </button>
+          <button onClick={() => readEvent(event.id)} className={styles.markRead} disabled={!event.alert}>Read</button>
         </div>
       ) : (
         setRemainingTime(0)

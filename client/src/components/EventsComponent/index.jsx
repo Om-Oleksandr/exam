@@ -1,17 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import { addEvent, markRead } from '../../store/slices/eventsSlice';
+import { addEvent, markAllRead } from '../../store/slices/eventsSlice';
 import AddForm from './AddForm';
 import EventsList from './EventsList';
-import styles from './Events.module.sass'
+import styles from './Events.module.sass';
 
 const Events = () => {
   const dispatch = useDispatch();
+  const { events } = useSelector(state => state.events);
   const onSubmit = (values, formikBag) => {
     values.date = values.date.getTime();
-    values.reminder = Number(values.reminder)
+    values.reminder = Number(values.reminder);
     values.id = Date.now();
     values.createdAt = Date.now();
     values.alert = false;
@@ -19,16 +20,28 @@ const Events = () => {
     dispatch(addEvent(values));
     formikBag.resetForm();
   };
- const markAsRead = () =>{
-  dispatch(markRead())
- }
+  const filteredEvents = events.filter(event => event.alert === true);
+  const markAsRead = () => {
+    dispatch(markAllRead());
+  };
   return (
     <>
       <Header />
       <section className={styles.main}>
-        <button onClick={markAsRead}>mark all as read</button>
-        <AddForm onSubmit={onSubmit} className={[styles.form, styles.reminder, styles.radioSection, styles.inputError, styles.indicator]}/>
-        <EventsList className={styles.list}/>
+        <button onClick={markAsRead} disabled={filteredEvents.length === 0}>
+          mark all as read
+        </button>
+        <AddForm
+          onSubmit={onSubmit}
+          className={[
+            styles.form,
+            styles.reminder,
+            styles.radioSection,
+            styles.inputError,
+            styles.indicator,
+          ]}
+        />
+        <EventsList className={styles.list} />
       </section>
       <Footer />
     </>
