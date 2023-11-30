@@ -3,7 +3,7 @@ WITH "TopCreativeUsers" AS (
   FROM "Users"
   WHERE "role" = 'creator'
   ORDER BY "rating" DESC
-  LIMIT 3
+  FETCH FIRST 3 ROWS WITH TIES
 )
 UPDATE "Users"
 SET "balance" = "balance" + 10
