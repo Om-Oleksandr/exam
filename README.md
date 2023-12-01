@@ -46,7 +46,9 @@ Create controller methods for moderator </br>
 Create routes in server router </br>
 Create REST requests in client restController </br>
 Create async thunks in slices </br>
-Add role to registration for convinient usage `for test purposes only`
+For access to moderator use: </br>
+Email: `moderator@gmail.com` </br>
+Password : `moderator@gmail.com`
 
 ### Do sql and mongo requsets
 Create requests that fullfill task for sql and no-sql DBs
