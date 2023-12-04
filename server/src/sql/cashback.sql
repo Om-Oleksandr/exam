@@ -17,4 +17,4 @@ WITH "contests" AS (
 UPDATE "Users"
 SET "balance" = "balance" + "contests"."cashbackAmount"
 FROM "contests"
-WHERE "Users"."id" = "contests"."id";
+WHERE "Users"."id" = "contests"."id" AND "Users"."role" = 'customer';
